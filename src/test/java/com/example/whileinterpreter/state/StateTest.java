@@ -11,7 +11,7 @@ public class StateTest {
 
 	@Before
 	public void setUp() throws Exception {
-		state = new State();
+		state = new StateImpl();
 	}
 
 	@Test
