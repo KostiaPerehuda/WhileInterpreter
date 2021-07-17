@@ -1,6 +1,7 @@
 package com.example.whileinterpreter.ast.bexp;
 
 import com.example.whileinterpreter.ast.aexp.ArithmeticExpression;
+import com.example.whileinterpreter.state.State;
 
 public class Equals implements BooleanExpression {
 	
@@ -13,8 +14,8 @@ public class Equals implements BooleanExpression {
 	}
 
 	@Override
-	public boolean eval() {
-		return exp1.eval() == exp2.eval();
+	public boolean eval(State state) {
+		return exp1.eval(state) == exp2.eval(state);
 	}
 
 }

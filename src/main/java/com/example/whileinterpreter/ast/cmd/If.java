@@ -17,7 +17,7 @@ public class If implements Command {
 
 	@Override
 	public void execute(State state) {
-		if (bool.eval()) {
+		if (bool.eval(state)) {
 			cmd1.execute(state);
 		} else {
 			cmd2.execute(state);

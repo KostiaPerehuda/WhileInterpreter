@@ -15,7 +15,7 @@ public class Assign implements Command {
 	
 	@Override
 	public void execute(State state) {
-		state.put(name, exp.eval());
+		state.put(name, exp.eval(state));
 	}
 
 }

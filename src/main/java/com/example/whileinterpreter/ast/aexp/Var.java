@@ -1,5 +1,7 @@
 package com.example.whileinterpreter.ast.aexp;
 
+import com.example.whileinterpreter.state.State;
+
 public class Var implements ArithmeticExpression {
 	
 	private String name;
@@ -9,10 +11,8 @@ public class Var implements ArithmeticExpression {
 	}
 
 	@Override
-	public long eval() {
-		// TODO Connect this to internal program state map to fetch the value of the variable
-		// return State.get(name);
-		return 0;
+	public long eval(State state) {
+		return state.get(name);
 	}
 
 }

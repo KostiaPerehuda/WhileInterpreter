@@ -1,5 +1,7 @@
 package com.example.whileinterpreter.ast.aexp;
 
+import com.example.whileinterpreter.state.State;
+
 public class Plus extends BinaryArithmeticExpression {
 	
 	public Plus(ArithmeticExpression exp1, ArithmeticExpression exp2) {
@@ -7,8 +9,8 @@ public class Plus extends BinaryArithmeticExpression {
 	}
 
 	@Override
-	public long eval() {
-		return getExp1().eval() + getExp2().eval();
+	public long eval(State state) {
+		return getExp1().eval(state) + getExp2().eval(state);
 	}
 
 }

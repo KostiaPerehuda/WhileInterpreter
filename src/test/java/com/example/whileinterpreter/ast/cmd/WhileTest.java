@@ -32,11 +32,11 @@ public class WhileTest {
 
 	@Test
 	public void shouldNotEnterLoopBodyWhenConditionIsInitiallyFalse() {
-		when(condition.eval()).thenReturn(false);
+		when(condition.eval(state)).thenReturn(false);
 
 		new While(condition, loopBody).execute(state);
 
-		verify(condition, times(1)).eval();
+		verify(condition, times(1)).eval(state);
 
 		verifyNoInteractions(loopBody);
 		verifyNoInteractions(state);
@@ -44,11 +44,11 @@ public class WhileTest {
 
 	@Test
 	public void shouldOnlyEnterLoopBodyOnceWhenConditionIsInitiallyTrueAndFalseAfterOneIteration() {
-		when(condition.eval()).thenReturn(true).thenReturn(false);
+		when(condition.eval(state)).thenReturn(true).thenReturn(false);
 
 		new While(condition, loopBody).execute(state);
 
-		verify(condition, times(2)).eval();
+		verify(condition, times(2)).eval(state);
 		verify(loopBody, times(1)).execute(state);
 
 		verifyNoInteractions(state);

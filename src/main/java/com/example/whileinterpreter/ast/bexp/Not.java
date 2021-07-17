@@ -1,5 +1,7 @@
 package com.example.whileinterpreter.ast.bexp;
 
+import com.example.whileinterpreter.state.State;
+
 public class Not implements BooleanExpression {
 
 	private BooleanExpression exp;
@@ -9,8 +11,8 @@ public class Not implements BooleanExpression {
 	}
 		
 	@Override
-	public boolean eval() {
-		return !exp.eval();
+	public boolean eval(State state) {
+		return !exp.eval(state);
 	}
 
 }

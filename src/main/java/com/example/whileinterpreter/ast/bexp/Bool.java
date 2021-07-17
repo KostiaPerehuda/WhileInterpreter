@@ -1,5 +1,7 @@
 package com.example.whileinterpreter.ast.bexp;
 
+import com.example.whileinterpreter.state.State;
+
 public enum Bool implements BooleanExpression {
 	
 	TRUE(true), FALSE(false);
@@ -11,7 +13,7 @@ public enum Bool implements BooleanExpression {
 	}
 
 	@Override
-	public boolean eval() {
+	public boolean eval(State state) {
 		return value;
 	}	
 

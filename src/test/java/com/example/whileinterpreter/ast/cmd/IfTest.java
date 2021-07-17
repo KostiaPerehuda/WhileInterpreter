@@ -35,11 +35,11 @@ public class IfTest {
 
 	@Test
 	public void shouldOnlyExecuteIfClauseWhenConditionIsTrue() {
-		when(condition.eval()).thenReturn(true);
+		when(condition.eval(state)).thenReturn(true);
 
 		new If(condition, ifClause, elseClause).execute(state);
 
-		verify(condition, times(1)).eval();
+		verify(condition, times(1)).eval(state);
 		verify(ifClause, times(1)).execute(state);
 
 		verifyNoInteractions(elseClause);
@@ -48,11 +48,11 @@ public class IfTest {
 
 	@Test
 	public void shouldOnlyExecuteElseClauseWhenConditionIsFalse() {
-		when(condition.eval()).thenReturn(false);
+		when(condition.eval(state)).thenReturn(false);
 
 		new If(condition, ifClause, elseClause).execute(state);
 
-		verify(condition, times(1)).eval();
+		verify(condition, times(1)).eval(state);
 		verify(elseClause, times(1)).execute(state);
 
 		verifyNoInteractions(ifClause);

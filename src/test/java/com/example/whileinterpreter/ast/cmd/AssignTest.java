@@ -31,11 +31,11 @@ public class AssignTest {
 		String varName = "dummy";
 		long result = 1;
 		
-		when(exp.eval()).thenReturn(result);
+		when(exp.eval(state)).thenReturn(result);
 		
 		new Assign(varName, exp).execute(state);
 		
-		verify(exp, times(1)).eval();
+		verify(exp, times(1)).eval(state);
 		verify(state, times(1)).put(varName, result);
 	}
 
