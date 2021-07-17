@@ -5,7 +5,6 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.when;
 
-import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
@@ -28,10 +27,6 @@ public class IfTest {
 	
 	@Mock
 	private Command elseClause;
-
-	@Before
-	public void setUp() throws Exception {
-	}
 
 	@Test
 	public void shouldOnlyExecuteIfClauseWhenConditionIsTrue() {

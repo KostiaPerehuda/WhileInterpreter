@@ -4,7 +4,6 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
@@ -22,21 +21,14 @@ public class AssignTest {
 	@Mock
 	private ArithmeticExpression exp;
 
-	@Before
-	public void setUp() throws Exception {
-	}
-
 	@Test
 	public void shouldEvaluateExpressionAndPutResultIntoMap() {
-		String varName = "dummy";
-		long result = 1;
-		
-		when(exp.eval(state)).thenReturn(result);
-		
-		new Assign(varName, exp).execute(state);
-		
+		when(exp.eval(state)).thenReturn(1L);
+
+		new Assign("dummy", exp).execute(state);
+
 		verify(exp, times(1)).eval(state);
-		verify(state, times(1)).put(varName, result);
+		verify(state, times(1)).put("dummy", 1L);
 	}
 
 }
