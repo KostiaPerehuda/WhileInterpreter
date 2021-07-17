@@ -15,9 +15,8 @@ public class While implements Command {
 
 	@Override
 	public void execute(State state) {
-		if (bool.eval(state)) {
+		while (bool.eval(state)) {
 			cmd.execute(state);
-			execute(state);
 		}
 	}
 
