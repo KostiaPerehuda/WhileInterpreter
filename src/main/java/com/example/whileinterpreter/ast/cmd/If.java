@@ -5,9 +5,9 @@ import com.example.whileinterpreter.state.State;
 
 public class If implements Command {
 
-	BooleanExpression bool;
-	Command cmd1;
-	Command cmd2;
+	private BooleanExpression bool;
+	private Command cmd1;
+	private Command cmd2;
 	
 	public If(BooleanExpression bool, Command cmd1, Command cmd2) {
 		this.bool = bool;

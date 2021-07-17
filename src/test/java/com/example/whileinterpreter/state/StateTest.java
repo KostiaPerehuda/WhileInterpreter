@@ -1,6 +1,6 @@
 package com.example.whileinterpreter.state;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -37,7 +37,7 @@ public class StateTest {
 	public void shouldPrintEmptyMapIfMapIsEmpty() {
 		String stateString = state.toString();
 		
-		assertEquals( "{}", stateString);
+		assertEquals("{}", stateString);
 	}
 	
 	@Test

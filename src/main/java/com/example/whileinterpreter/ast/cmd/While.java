@@ -5,8 +5,8 @@ import com.example.whileinterpreter.state.State;
 
 public class While implements Command {
 	
-	BooleanExpression bool;
-	Command cmd;
+	private BooleanExpression bool;
+	private Command cmd;
 	
 	public While(BooleanExpression bool, Command cmd) {
 		this.bool = bool;
@@ -15,7 +15,7 @@ public class While implements Command {
 
 	@Override
 	public void execute(State state) {
-		if (!bool.eval()) {
+		if (bool.eval()) {
 			cmd.execute(state);
 			execute(state);
 		}
