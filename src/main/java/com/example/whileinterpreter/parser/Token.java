@@ -1,4 +1,4 @@
-package com.example.whileinterpreter.parser.lexer;
+package com.example.whileinterpreter.parser;
 
 public class Token {
 

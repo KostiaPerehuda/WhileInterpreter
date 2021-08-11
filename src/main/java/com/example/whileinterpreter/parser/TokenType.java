@@ -1,20 +1,23 @@
-package com.example.whileinterpreter.parser.lexer;
+package com.example.whileinterpreter.parser;
 
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public enum TokenType {
 
-	CONTROL_SYMBOL("[=;()<!&+-]|\\*"),
-	KEYWORD("skip|if|then|else|while|do|true|false"),
+	CONTROL_SYMBOL("\\[", "\\]", "<=", "==", "\\*", "[=;()+-]"),
+	KEYWORD("skip", "if", "then", "else", "while", "do", "true", "false", "and", "not"),
 	IDENTIFIER("[a-zA-Z_][a-zA-Z_0-9]*"),
 	NUMBER("\\d+"),
 	WHITESPACE("\\p{javaWhitespace}+");
 
 	private String pattern;
 
-	private TokenType(String pattern) {
+	private TokenType(String pattern, String... patterns) {
 		this.pattern = pattern;
+		if (patterns.length > 0) {
+			this.pattern += ("|" + Stream.of(patterns).collect(Collectors.joining("|")));
+		}
 	}
 
 	public String getPattern() {

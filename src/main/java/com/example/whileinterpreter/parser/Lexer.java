@@ -1,4 +1,4 @@
-package com.example.whileinterpreter.parser.lexer;
+package com.example.whileinterpreter.parser;
 
 import java.util.LinkedList;
 import java.util.regex.Matcher;
