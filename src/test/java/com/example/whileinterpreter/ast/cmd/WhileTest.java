@@ -21,7 +21,7 @@ public class WhileTest {
 
 	@Mock
 	private BooleanExpression condition;
-	
+
 	@Mock
 	private Command loopBody;
 

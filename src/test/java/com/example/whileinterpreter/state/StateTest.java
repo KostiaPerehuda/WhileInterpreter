@@ -6,7 +6,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 public class StateTest {
-	
+
 	private State state;
 
 	@Before
@@ -20,22 +20,22 @@ public class StateTest {
 
 		assertEquals(1L, state.get("dummy"));
 	}
-	
+
 	@Test(expected = UndefinedVariableException.class)
 	public void shouldThrowErrorWhenGettingUndefinedVariableFromTheMap() {
 		state.get("dummy");
 	}
-	
+
 	@Test
 	public void shouldPrintEmptyMapIfMapIsEmpty() {
 		assertEquals("{}", state.toString());
 	}
-	
+
 	@Test
 	public void shouldPrintAllEntriesInTheNonEmptyMap() {
 		state.put("dummy1", 1L);
 		state.put("dummy2", 2L);
-		
+
 		assertEquals("{\n\tdummy1 : 1;\n\tdummy2 : 2;\n}", state.toString());
 	}
 

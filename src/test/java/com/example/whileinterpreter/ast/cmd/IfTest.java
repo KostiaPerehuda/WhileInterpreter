@@ -21,10 +21,10 @@ public class IfTest {
 
 	@Mock
 	private BooleanExpression condition;
-	
+
 	@Mock
 	private Command ifClause;
-	
+
 	@Mock
 	private Command elseClause;
 
