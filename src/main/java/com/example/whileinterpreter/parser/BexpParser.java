@@ -64,6 +64,8 @@ public class BexpParser {
 					return parseBrackets(tokens);
 				}
 
+				throw new RuntimeException("Syntax error!");
+
 			default:
 				exp = AexpParser.parse(tokens);
 				if (tokens.isEmpty()) {
