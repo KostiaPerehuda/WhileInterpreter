@@ -20,12 +20,16 @@ public class Lexer {
 			}
 
 			for (TokenType t : TokenType.values()) {
-				if (t == TokenType.WHITESPACE)
-					continue;
 
 				group = m.group();
+
 				if (group.matches(t.getPattern())) {
-					tokens.add(new Token(t, group));
+					if (t == TokenType.INVALID_TOKEN)
+						throw new RuntimeException("Lexical Error at " + group + "!");
+
+					if (t != TokenType.WHITESPACE)
+						tokens.add(new Token(t, group));
+
 					break;
 				}
 			}

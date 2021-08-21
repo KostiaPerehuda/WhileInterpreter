@@ -5,11 +5,12 @@ import java.util.stream.Stream;
 
 public enum TokenType {
 
-	CONTROL_SYMBOL("\\[", "\\]", "<=", "==", "\\*", "[=;()+-]"),
+	CONTROL_SYMBOL("\\{", "\\}", "<=", "==", "\\*", "[=;()+-]"),
 	KEYWORD("skip", "if", "then", "else", "while", "do", "true", "false", "and", "not"),
 	IDENTIFIER("[a-zA-Z_][a-zA-Z_0-9]*"),
 	NUMBER("\\d+"),
-	WHITESPACE("\\p{javaWhitespace}+");
+	WHITESPACE("\\p{javaWhitespace}+"),
+	INVALID_TOKEN(".");
 
 	private String pattern;
 
