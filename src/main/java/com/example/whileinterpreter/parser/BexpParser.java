@@ -26,7 +26,7 @@ public class BexpParser {
 		while (!tokens.isEmpty()) {
 			t = tokens.getFirst();
 
-			if (t.getData().equals("and")) {
+			if (t.getData().equals("&&")) {
 				tokens.removeFirst();
 				exp = new And(exp, parseAtom(tokens));
 			} else {
@@ -52,9 +52,6 @@ public class BexpParser {
 				} else if (t.getData().equals("false")) {
 					tokens.removeFirst();
 					return Bool.FALSE;
-				} else if (t.getData().equals("not")) {
-					tokens.removeFirst();
-					return new Not(parseAtom(tokens));
 				}
 
 				throw new RuntimeException("Syntax error!");
@@ -62,6 +59,9 @@ public class BexpParser {
 			case CONTROL_SYMBOL:
 				if (t.getData().equals("(")) {
 					return parseBrackets(tokens);
+				} else if (t.getData().equals("!")) {
+					tokens.removeFirst();
+					return new Not(parseAtom(tokens));
 				}
 
 				throw new RuntimeException("Syntax error!");

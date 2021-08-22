@@ -70,24 +70,34 @@ public class CommandParser {
 		}
 
 		Token t = tokens.getFirst();
+		Command cmd;
 
 		switch (t.getType()) {
-		case IDENTIFIER:
-			return parseAssign(tokens);
-
-		case KEYWORD:
-			if (t.getData().equals("if")) {
-				return parseIf(tokens);
-			} else if (t.getData().equals("while")) {
-				return parseWhile(tokens);
-			} else if (t.getData().equals("skip")) {
-				tokens.removeFirst();
-				return new Sequence();
-			}
-
-		default:
-			throw new RuntimeException("Syntax error at token " + t + "! Unexpected token at that place!");
+			case IDENTIFIER:
+				cmd = parseAssign(tokens);
+				break;
+	
+			case KEYWORD:
+				if (t.getData().equals("if")) {
+					cmd = parseIf(tokens);
+				} else if (t.getData().equals("while")) {
+					cmd = parseWhile(tokens);
+				} else if (t.getData().equals("skip")) {
+					tokens.removeFirst();
+					cmd = new Sequence();
+				} else {
+					throw new RuntimeException("Syntax error at token " + t + "! Unexpected token at that place!");
+				}
+				break;
+	
+			default:
+				throw new RuntimeException("Syntax error at token " + t + "! Unexpected token at that place!");
 		}
+
+		if (tokens.getFirst().getData().equals(";"))
+			tokens.removeFirst();
+
+		return cmd;
 	}
 
 	private static Command parseAssign(LinkedList<Token> tokens) {
