@@ -29,12 +29,13 @@ public class PlusTest {
 	public void shouldEvaluateBothChildExpressionsAndReturnTheSumOfTheirResults() {
 		when(exp1.eval(state)).thenReturn(3L);
 		when(exp2.eval(state)).thenReturn(5L);
-		
+
 		long result = new Plus(exp1, exp2).eval(state);
 
 		verify(exp1, times(1)).eval(state);
 		verify(exp2, times(1)).eval(state);
 		verifyNoInteractions(state);
+
 		assertEquals(8L, result);
 	}
 

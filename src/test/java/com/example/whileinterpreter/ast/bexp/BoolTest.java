@@ -14,6 +14,7 @@ public class BoolTest {
 	public void trueConstantShouldEvaluateToTrue() {
 		assertTrue(Bool.TRUE.eval(null));
 	}
+
 	@Test
 	public void falseConstantShouldEvaluateToFalse() {
 		assertFalse(Bool.FALSE.eval(null));

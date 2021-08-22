@@ -16,7 +16,7 @@ public class SequenceTest {
 
 	@Mock
 	private State state;
-	
+
 	@Mock
 	private Command command;
 
