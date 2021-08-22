@@ -85,7 +85,7 @@ public class BexpParser {
 		}
 	}
 
-	private static BooleanExpression parseBrackets(LinkedList<Token> tokens) {
+	public static BooleanExpression parseBrackets(LinkedList<Token> tokens) {
 		Token t = tokens.getFirst();
 		if (t.getType() != TokenType.CONTROL_SYMBOL || !t.getData().equals("(")) {
 			throw new RuntimeException("Syntax error!");

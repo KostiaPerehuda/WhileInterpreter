@@ -88,7 +88,7 @@ public class AexpParser {
 		}
 	}
 
-	private static ArithmeticExpression parseBrackets(LinkedList<Token> tokens) {
+	public static ArithmeticExpression parseBrackets(LinkedList<Token> tokens) {
 		Token t = tokens.getFirst();
 		if (t.getType() != TokenType.CONTROL_SYMBOL || !t.getData().equals("(")) {
 			throw new RuntimeException("Syntax error at token " + t + "! Unexpected token at that place!");

@@ -1,6 +1,7 @@
 package com.example.whileinterpreter.parser;
 
 import java.util.LinkedList;
+import java.util.NoSuchElementException;
 
 import com.example.whileinterpreter.ast.bexp.BooleanExpression;
 import com.example.whileinterpreter.ast.cmd.Assign;
@@ -120,41 +121,31 @@ public class CommandParser {
 			throw new RuntimeException("Syntax error at token " + t + "! < KEYWORD if > expected!");
 		}
 
-		BooleanExpression condition = BexpParser.parse(tokens);
-
-		t = tokens.removeFirst();
-		if (!t.getData().equals("then")) {
-			throw new RuntimeException("Syntax error at token " + t + "! < KEYWORD then > expected!");
-		}
+		BooleanExpression condition = BexpParser.parseBrackets(tokens);
 
 		Command ifClause = parse(tokens);
 
-		t = tokens.removeFirst();
+		t = tokens.getFirst();
 		if (!t.getData().equals("else")) {
-			throw new RuntimeException("Syntax error at token " + t + "! < KEYWORD else > expected!");
+			return new If(condition, ifClause, new Sequence());
 		}
 
+		tokens.removeFirst();
 		return new If(condition, ifClause, parse(tokens));
 	}
 
 	private static Command parseWhile(LinkedList<Token> tokens) {
-		if (tokens.isEmpty()) {
+
+		try {
+			Token t = tokens.removeFirst();
+			if (!t.getData().equals("while"))
+				throw new RuntimeException("Syntax error at token " + t + "! < KEYWORD while > expected!");
+
+			return new While(BexpParser.parseBrackets(tokens), parse(tokens));
+
+		} catch (NoSuchElementException e) {
 			throw new RuntimeException("Syntax error! Unexpected end of input!");
 		}
-
-		Token t = tokens.removeFirst();
-		if (!t.getData().equals("while")) {
-			throw new RuntimeException("Syntax error at token " + t + "! < KEYWORD while > expected!");
-		}
-
-		BooleanExpression condition = BexpParser.parse(tokens);
-
-		t = tokens.removeFirst();
-		if (!t.getData().equals("do")) {
-			throw new RuntimeException("Syntax error at token " + t + "! < KEYWORD do > expected!");
-		}
-
-		return new While(condition, parse(tokens));
 	}
 
 }
