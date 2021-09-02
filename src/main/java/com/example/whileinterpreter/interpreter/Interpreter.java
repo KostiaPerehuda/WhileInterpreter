@@ -2,6 +2,7 @@ package com.example.whileinterpreter.interpreter;
 
 import java.io.IOException;
 
+import com.example.whileinterpreter.ast.cmd.Command;
 import com.example.whileinterpreter.parser.ProgramParser;
 import com.example.whileinterpreter.state.State;
 import com.example.whileinterpreter.state.StateImpl;
@@ -29,6 +30,10 @@ public class Interpreter {
 
 	public void executeString(String string) {
 		ProgramParser.parseString(string).execute(state);
+	}
+
+	public void execute(Command command) {
+		command.execute(state);
 	}
 
 	public void printState() {
