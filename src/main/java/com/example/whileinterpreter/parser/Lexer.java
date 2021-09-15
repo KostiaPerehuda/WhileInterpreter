@@ -9,9 +9,10 @@ public class Lexer {
 	public static LinkedList<Token> lex(String input) {
 		LinkedList<Token> tokens = new LinkedList<Token>();
 
-		Pattern p = Pattern.compile(TokenType.getFullPattern());
+		Pattern p = Pattern.compile(TokenType.fullPattern);
 		Matcher m = p.matcher(input);
 		String group;
+		TokenType t;
 
 		while (true) {
 			if (!m.find()) {
@@ -19,20 +20,20 @@ public class Lexer {
 				else throw new RuntimeException("Unexpected Symbol!");
 			}
 
-			for (TokenType t : TokenType.values()) {
+			for (int groupIdx = 1; groupIdx <= TokenType.values.length; groupIdx++) {
+				if ((group = m.group(groupIdx)) == null) continue;
 
-				group = m.group();
+				t = TokenType.fromInt(groupIdx);
 
-				if (group.matches(t.getPattern())) {
-					if (t == TokenType.INVALID_TOKEN)
-						throw new RuntimeException("Lexical Error at " + group + "!");
+				if (t == TokenType.INVALID_TOKEN)
+					throw new RuntimeException("Lexical Error at " + group + "!");
 
-					if (t != TokenType.WHITESPACE)
-						tokens.add(new Token(t, group));
+				if (t != TokenType.WHITESPACE)
+					tokens.add(new Token(t, group));
 
-					break;
-				}
+				break;
 			}
+
 		}
 		return tokens;
 	}
