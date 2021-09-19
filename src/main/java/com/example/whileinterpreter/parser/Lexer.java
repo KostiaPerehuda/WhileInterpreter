@@ -12,7 +12,7 @@ public class Lexer {
 		return lex(input.split("\n"));
 	}
 
-	public static LinkedList<Token> lex(String... input) {
+	private static LinkedList<Token> lex(String... input) {
 		LinkedList<Token> tokens = new LinkedList<Token>();
 
 		Matcher m;
