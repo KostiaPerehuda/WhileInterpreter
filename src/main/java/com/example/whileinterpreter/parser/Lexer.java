@@ -24,7 +24,7 @@ public class Lexer {
 			while (true) {
 				if (!m.find()) {
 					if (m.hitEnd()) break;
-					else throw new RuntimeException("Unexpected Symbol!");
+					else throw new LexicalError("Unexpected Symbol at row " + (row+1) + "!");
 				}
 
 				for (TokenType t : TokenType.values) {
