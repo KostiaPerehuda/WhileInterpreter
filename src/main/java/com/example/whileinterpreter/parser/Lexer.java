@@ -1,7 +1,6 @@
 package com.example.whileinterpreter.parser;
 
 import java.util.LinkedList;
-import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -34,7 +33,7 @@ public class Lexer {
 
 					if (group.matches(t.getPattern())) {
 						if (t == TokenType.INVALID_TOKEN)
-							throw new RuntimeException("Lexical Error at " + group + "!");
+							throw new LexicalError(row+1, m.start()+1, group);
 
 						if (t != TokenType.WHITESPACE)
 							tokens.add(new Token(t, group));

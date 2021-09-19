@@ -11,7 +11,7 @@ public enum TokenType {
 	NUMBER("\\b\\d+\\b"),
 	WHITESPACE("\\p{javaWhitespace}+"),
 
-	INVALID_TOKEN(".+(?=" + computePattern(CONTROL_SYMBOL, WHITESPACE) + "|$)");
+	INVALID_TOKEN(".+?(?=" + computePattern(CONTROL_SYMBOL, WHITESPACE) + "|$)");
 
 	public static final TokenType[] values = values();
 	public static final String fullPattern = computePattern(values);
