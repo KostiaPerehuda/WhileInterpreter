@@ -9,6 +9,8 @@ public enum TokenType {
 	KEYWORD("\\bskip\\b", "\\bif\\b", "\\belse\\b", "\\bwhile\\b", "\\btrue\\b", "\\bfalse\\b"),
 	IDENTIFIER("\\b[a-zA-Z_][a-zA-Z_0-9]*\\b"),
 	NUMBER("\\b\\d+\\b"),
+
+	COMMENT("//.*$"),
 	WHITESPACE("\\p{javaWhitespace}+"),
 
 	INVALID_TOKEN(".+?(?=" + computePattern(CONTROL_SYMBOL, WHITESPACE) + "|$)");

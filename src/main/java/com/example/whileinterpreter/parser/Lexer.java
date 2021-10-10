@@ -35,7 +35,7 @@ public class Lexer {
 						if (t == TokenType.INVALID_TOKEN)
 							throw new LexicalError(row+1, m.start()+1, group);
 
-						if (t != TokenType.WHITESPACE)
+						if (t != TokenType.WHITESPACE && t != TokenType.COMMENT)
 							tokens.add(new Token(t, group));
 
 						break;
