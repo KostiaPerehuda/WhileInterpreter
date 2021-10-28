@@ -6,11 +6,17 @@ import java.util.stream.Stream;
 public enum TokenType {
 
 	CONTROL_SYMBOL("\\{", "\\}", "<=", "==", "\\*", "&&", "[!=;()+-]"),
-	KEYWORD("skip", "if", "else", "while", "true", "false"),
-	IDENTIFIER("[a-zA-Z_][a-zA-Z_0-9]*"),
-	NUMBER("\\d+"),
+	KEYWORD("\\bskip\\b", "\\bif\\b", "\\belse\\b", "\\bwhile\\b", "\\btrue\\b", "\\bfalse\\b"),
+	IDENTIFIER("\\b[a-zA-Z_][a-zA-Z_0-9]*\\b"),
+	NUMBER("\\b\\d+\\b"),
+
+	COMMENT("//.*$"),
 	WHITESPACE("\\p{javaWhitespace}+"),
-	INVALID_TOKEN(".");
+
+	INVALID_TOKEN(".+?(?=" + computePattern(CONTROL_SYMBOL, WHITESPACE) + "|$)");
+
+	public static final TokenType[] values = values();
+	public static final String fullPattern = computePattern(values);
 
 	private String pattern;
 
@@ -24,10 +30,10 @@ public enum TokenType {
 	public String getPattern() {
 		return pattern;
 	}
-	
-	public static String getFullPattern() {
-		return Stream.of(TokenType.values())
-				.map(t -> "(" + t.getPattern() + ")")
+
+	private static String computePattern(TokenType... tokens) {
+		return Stream.of(tokens)
+				.map(TokenType::getPattern)
 				.collect(Collectors.joining("|"));
 	}
 

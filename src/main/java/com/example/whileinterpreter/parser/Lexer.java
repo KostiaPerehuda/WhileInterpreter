@@ -6,31 +6,40 @@ import java.util.regex.Pattern;
 
 public class Lexer {
 
+	private static Pattern pattern = Pattern.compile(TokenType.fullPattern);
+
 	public static LinkedList<Token> lex(String input) {
+		return lex(input.split("\n"));
+	}
+
+	private static LinkedList<Token> lex(String... input) {
 		LinkedList<Token> tokens = new LinkedList<Token>();
 
-		Pattern p = Pattern.compile(TokenType.getFullPattern());
-		Matcher m = p.matcher(input);
+		Matcher m;
 		String group;
 
-		while (true) {
-			if (!m.find()) {
-				if (m.hitEnd()) break;
-				else throw new RuntimeException("Unexpected Symbol!");
-			}
+		for (int row = 0; row < input.length; row++) {
+			m = pattern.matcher(input[row]);
 
-			for (TokenType t : TokenType.values()) {
+			while (true) {
+				if (!m.find()) {
+					if (m.hitEnd()) break;
+					else throw new LexicalError("Unexpected Symbol at row " + (row+1) + "!");
+				}
 
-				group = m.group();
+				for (TokenType t : TokenType.values) {
 
-				if (group.matches(t.getPattern())) {
-					if (t == TokenType.INVALID_TOKEN)
-						throw new RuntimeException("Lexical Error at " + group + "!");
+					group = m.group();
 
-					if (t != TokenType.WHITESPACE)
-						tokens.add(new Token(t, group));
+					if (group.matches(t.getPattern())) {
+						if (t == TokenType.INVALID_TOKEN)
+							throw new LexicalError(row+1, m.start()+1, group);
 
-					break;
+						if (t != TokenType.WHITESPACE && t != TokenType.COMMENT)
+							tokens.add(new Token(t, group));
+
+						break;
+					}
 				}
 			}
 		}
