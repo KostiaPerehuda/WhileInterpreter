@@ -7,7 +7,7 @@ public class Sequence implements Command {
 	private Command[] commands;
 
 	public Sequence(Command... commands) {
-		this.commands = commands;
+		this.commands = commands.clone();
 	}
 
 	@Override
