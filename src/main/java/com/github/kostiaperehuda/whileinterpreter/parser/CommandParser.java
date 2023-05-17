@@ -43,7 +43,7 @@ public class CommandParser {
         }
         tokens.removeFirst();
 
-        Command sequence = new Sequence();
+        Command sequence = new Skip();
 
         while (!tokens.isEmpty()) {
             t = tokens.getFirst();
@@ -75,7 +75,7 @@ public class CommandParser {
                     case "while" -> cmd = parseWhile(tokens);
                     case "skip" -> {
                         tokens.removeFirst();
-                        cmd = new Sequence();
+                        cmd = new Skip();
                     }
                     default ->
                             throw new RuntimeException("Syntax error at token " + t + "! Unexpected token at that place!");
@@ -125,7 +125,7 @@ public class CommandParser {
 
         t = tokens.getFirst();
         if (!t.getData().equals("else")) {
-            return new If(condition, ifClause, new Sequence());
+            return new If(condition, ifClause, new Skip());
         }
 
         tokens.removeFirst();

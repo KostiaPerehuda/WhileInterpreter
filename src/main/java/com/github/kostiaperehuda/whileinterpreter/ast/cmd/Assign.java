@@ -3,19 +3,21 @@ package com.github.kostiaperehuda.whileinterpreter.ast.cmd;
 import com.github.kostiaperehuda.whileinterpreter.ast.aexp.ArithmeticExpression;
 import com.github.kostiaperehuda.whileinterpreter.state.State;
 
-public class Assign implements Command {
+import java.util.Objects;
 
-    private String name;
-    private ArithmeticExpression exp;
+public record Assign(String variableName, ArithmeticExpression expression) implements Command {
 
-    public Assign(String name, ArithmeticExpression exp) {
-        this.name = name;
-        this.exp = exp;
+    public Assign {
+        Objects.requireNonNull(expression);
+        Objects.requireNonNull(variableName);
+        if (variableName.isBlank()) {
+            throw new IllegalArgumentException(variableName);
+        }
     }
 
     @Override
     public void execute(State state) {
-        state.put(name, exp.eval(state));
+        state.put(variableName, expression.eval(state));
     }
 
 }

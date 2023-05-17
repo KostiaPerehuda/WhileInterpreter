@@ -6,22 +6,18 @@ import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.verifyNoInteractions;
 
 @RunWith(MockitoJUnitRunner.class)
-public class SequenceTest {
+public class SkipTest {
 
     @Mock
     private State state;
 
-    @Mock
-    private Command command;
-
     @Test
-    public void shouldExecuteBothChildCommands() {
-        new Sequence(command, command).execute(state);
+    public void shouldNotAffectProgramStateWhenExecuted() {
+        new Skip().execute(state);
 
-        verify(command, times(2)).execute(state);
         verifyNoInteractions(state);
     }
 

@@ -19,34 +19,34 @@ public class IfTest {
     private BooleanExpression condition;
 
     @Mock
-    private Command ifClause;
+    private Command ifBranch;
 
     @Mock
-    private Command elseClause;
+    private Command elseBranch;
 
     @Test
-    public void shouldOnlyExecuteIfClauseWhenConditionIsTrue() {
+    public void shouldOnlyExecuteIfBranchWhenConditionIsTrue() {
         when(condition.eval(state)).thenReturn(true);
 
-        new If(condition, ifClause, elseClause).execute(state);
+        new If(condition, ifBranch, elseBranch).execute(state);
 
         verify(condition, times(1)).eval(state);
-        verify(ifClause, times(1)).execute(state);
+        verify(ifBranch, times(1)).execute(state);
 
-        verifyNoInteractions(elseClause);
+        verifyNoInteractions(elseBranch);
         verifyNoInteractions(state);
     }
 
     @Test
-    public void shouldOnlyExecuteElseClauseWhenConditionIsFalse() {
+    public void shouldOnlyExecuteElseBranchWhenConditionIsFalse() {
         when(condition.eval(state)).thenReturn(false);
 
-        new If(condition, ifClause, elseClause).execute(state);
+        new If(condition, ifBranch, elseBranch).execute(state);
 
         verify(condition, times(1)).eval(state);
-        verify(elseClause, times(1)).execute(state);
+        verify(elseBranch, times(1)).execute(state);
 
-        verifyNoInteractions(ifClause);
+        verifyNoInteractions(ifBranch);
         verifyNoInteractions(state);
     }
 

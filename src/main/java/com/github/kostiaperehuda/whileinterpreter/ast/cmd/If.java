@@ -3,24 +3,22 @@ package com.github.kostiaperehuda.whileinterpreter.ast.cmd;
 import com.github.kostiaperehuda.whileinterpreter.ast.bexp.BooleanExpression;
 import com.github.kostiaperehuda.whileinterpreter.state.State;
 
-public class If implements Command {
+import java.util.Objects;
 
-    private BooleanExpression bool;
-    private Command cmd1;
-    private Command cmd2;
+public record If(BooleanExpression condition, Command ifBranch, Command elseBranch) implements Command {
 
-    public If(BooleanExpression bool, Command cmd1, Command cmd2) {
-        this.bool = bool;
-        this.cmd1 = cmd1;
-        this.cmd2 = cmd2;
+    public If {
+        Objects.requireNonNull(condition);
+        Objects.requireNonNull(ifBranch);
+        Objects.requireNonNull(elseBranch);
     }
 
     @Override
     public void execute(State state) {
-        if (bool.eval(state)) {
-            cmd1.execute(state);
+        if (condition.eval(state)) {
+            ifBranch.execute(state);
         } else {
-            cmd2.execute(state);
+            elseBranch.execute(state);
         }
     }
 
