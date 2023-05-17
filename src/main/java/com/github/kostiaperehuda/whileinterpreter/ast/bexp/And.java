@@ -2,19 +2,17 @@ package com.github.kostiaperehuda.whileinterpreter.ast.bexp;
 
 import com.github.kostiaperehuda.whileinterpreter.state.State;
 
-public class And implements BooleanExpression {
+import java.util.Objects;
 
-    private BooleanExpression exp1;
-    private BooleanExpression exp2;
+public record And(BooleanExpression left, BooleanExpression right) implements BooleanExpression {
 
-    public And(BooleanExpression exp1, BooleanExpression exp2) {
-        this.exp1 = exp1;
-        this.exp2 = exp2;
+    public And {
+        Objects.requireNonNull(left);
+        Objects.requireNonNull(right);
     }
 
     @Override
     public boolean eval(State state) {
-        return exp1.eval(state) && exp2.eval(state);
+        return left.eval(state) && right.eval(state);
     }
-
 }

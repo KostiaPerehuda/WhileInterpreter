@@ -2,17 +2,17 @@ package com.github.kostiaperehuda.whileinterpreter.ast.bexp;
 
 import com.github.kostiaperehuda.whileinterpreter.state.State;
 
-public class Not implements BooleanExpression {
+import java.util.Objects;
 
-    private BooleanExpression exp;
+public record Not(BooleanExpression operand) implements BooleanExpression {
 
-    public Not(BooleanExpression exp) {
-        this.exp = exp;
+    public Not {
+        Objects.requireNonNull(operand);
     }
 
     @Override
     public boolean eval(State state) {
-        return !exp.eval(state);
+        return !operand.eval(state);
     }
 
 }
