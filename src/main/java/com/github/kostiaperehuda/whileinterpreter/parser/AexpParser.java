@@ -67,7 +67,7 @@ public class AexpParser {
         switch (t.getType()) {
             case IDENTIFIER:
                 tokens.removeFirst();
-                return new Var(t.getData());
+                return new Variable(t.getData());
 
             case NUMBER:
                 tokens.removeFirst();

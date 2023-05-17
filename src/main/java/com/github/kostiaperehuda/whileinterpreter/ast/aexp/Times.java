@@ -2,15 +2,18 @@ package com.github.kostiaperehuda.whileinterpreter.ast.aexp;
 
 import com.github.kostiaperehuda.whileinterpreter.state.State;
 
-public class Times extends BinaryArithmeticExpression {
+import java.util.Objects;
 
-    public Times(ArithmeticExpression exp1, ArithmeticExpression exp2) {
-        super(exp1, exp2);
+public record Times(ArithmeticExpression left, ArithmeticExpression right) implements ArithmeticExpression {
+
+    public Times {
+        Objects.requireNonNull(left);
+        Objects.requireNonNull(right);
     }
 
     @Override
     public long eval(State state) {
-        return getExp1().eval(state) * getExp2().eval(state);
+        return left.eval(state) * right.eval(state);
     }
 
 }

@@ -10,7 +10,7 @@ import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.*;
 
 @RunWith(MockitoJUnitRunner.class)
-public class VarTest {
+public class VariableTest {
 
     @Mock
     private State state;
@@ -19,7 +19,7 @@ public class VarTest {
     public void shouldGetVariableValueFromTheProgramStateByVariableNameAndReturnTheValue() {
         when(state.get("dummy")).thenReturn(1L);
 
-        long result = new Var("dummy").eval(state);
+        long result = new Variable("dummy").eval(state);
 
         verify(state, times(1)).get("dummy");
         assertEquals(1L, result);
