@@ -1,13 +1,9 @@
 package com.github.kostiaperehuda.whileinterpreter.parser;
 
-import java.util.Deque;
-
 import com.github.kostiaperehuda.whileinterpreter.ast.bexp.BooleanExpression;
-import com.github.kostiaperehuda.whileinterpreter.ast.cmd.Assign;
-import com.github.kostiaperehuda.whileinterpreter.ast.cmd.Command;
-import com.github.kostiaperehuda.whileinterpreter.ast.cmd.If;
-import com.github.kostiaperehuda.whileinterpreter.ast.cmd.Sequence;
-import com.github.kostiaperehuda.whileinterpreter.ast.cmd.While;
+import com.github.kostiaperehuda.whileinterpreter.ast.cmd.*;
+
+import java.util.Deque;
 
 public class CommandParser {
 
