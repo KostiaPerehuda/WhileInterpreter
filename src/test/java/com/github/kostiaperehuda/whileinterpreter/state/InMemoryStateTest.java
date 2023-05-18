@@ -1,38 +1,39 @@
 package com.github.kostiaperehuda.whileinterpreter.state;
 
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class InMemoryStateTest {
 
-    private State state;
-
-    @Before
-    public void setUp() {
-        state = new InMemoryState();
-    }
-
     @Test
     public void shouldSuccessfullyPutAndRetrieveDataFromTheMap() {
+        var state = new InMemoryState();
+
         state.put("dummy", 1L);
 
         assertEquals(1L, state.get("dummy"));
     }
 
-    @Test(expected = UndefinedVariableException.class)
+    @Test
     public void shouldThrowErrorWhenGettingUndefinedVariableFromTheMap() {
-        state.get("dummy");
+        var state = new InMemoryState();
+
+        assertThrows(UndefinedVariableException.class, () -> state.get("dummy"));
     }
 
     @Test
     public void shouldPrintEmptyMapIfMapIsEmpty() {
+        var state = new InMemoryState();
+
         assertEquals("{}", state.toString());
     }
 
     @Test
     public void shouldPrintAllEntriesInTheNonEmptyMap() {
+        var state = new InMemoryState();
+
         state.put("dummy1", 1L);
         state.put("dummy2", 2L);
 
