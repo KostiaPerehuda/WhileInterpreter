@@ -17,18 +17,8 @@ public class Interpreter {
         this.commandInterpreter = new CommandInterpreter();
     }
 
-    public void executeFileAndPrintResult(String filename) throws IOException {
-        executeFile(filename);
-        printState();
-    }
-
     public void executeFile(String filename) throws IOException {
         execute(ProgramParser.parseFile(filename));
-    }
-
-    public void executeStringAndPrintResult(String string) {
-        executeString(string);
-        printState();
     }
 
     public void executeString(String string) {
@@ -39,12 +29,8 @@ public class Interpreter {
         commandInterpreter.execute(command, state);
     }
 
-    public void printState() {
-        System.out.println(state);
-    }
-
-    public String getState() {
-        return state.toString();
+    public State getState() {
+        return state;
     }
 
     public static void run(String[] args) throws IOException {
@@ -52,7 +38,11 @@ public class Interpreter {
             System.out.println("Fatal error! No input file specified as a command line argument!");
             return;
         }
-        new Interpreter(new InMemoryState()).executeFileAndPrintResult(args[0]);
+
+        var interpreter = new Interpreter(new InMemoryState());
+
+        interpreter.executeFile(args[0]);
+        System.out.println(interpreter.getState());
     }
 
 }
