@@ -10,9 +10,11 @@ import java.io.IOException;
 public class Interpreter {
 
     private final State state;
+    private final CommandInterpreter commandInterpreter;
 
     public Interpreter(State state) {
         this.state = state;
+        this.commandInterpreter = new CommandInterpreter();
     }
 
     public void executeFileAndPrintResult(String filename) throws IOException {
@@ -21,7 +23,7 @@ public class Interpreter {
     }
 
     public void executeFile(String filename) throws IOException {
-        ProgramParser.parseFile(filename).execute(state);
+        execute(ProgramParser.parseFile(filename));
     }
 
     public void executeStringAndPrintResult(String string) {
@@ -30,11 +32,11 @@ public class Interpreter {
     }
 
     public void executeString(String string) {
-        ProgramParser.parseString(string).execute(state);
+        execute(ProgramParser.parseString(string));
     }
 
     public void execute(Command command) {
-        command.execute(state);
+        commandInterpreter.execute(command, state);
     }
 
     public void printState() {
