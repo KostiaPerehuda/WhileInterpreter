@@ -39,23 +39,21 @@ class CommandInterpreterTest {
 
         newCommandInterpreterUnderTest().execute(command, state);
 
-        verify(state, times(1)).put("a", 1L);
-        verify(state, never()).put("b", 2L);
-        verify(state, times(1)).put(any(), any());
+        verify(state).put("a", 1L);
+        verifyNoMoreInteractions(state);
     }
 
     @Test
     void shouldOnlyExecuteElseBranchWhenConditionIsFalse() {
         var state = mock(State.class);
-        var command = new If(Bool.TRUE,
+        var command = new If(Bool.FALSE,
                 new Assign("a", new Const(1L)),
                 new Assign("b", new Const(2L)));
 
         newCommandInterpreterUnderTest().execute(command, state);
 
-        verify(state, never()).put("a", 1L);
-        verify(state, times(1)).put("b", 2L);
-        verify(state, times(1)).put(any(), any());
+        verify(state).put("b", 2L);
+        verifyNoMoreInteractions(state);
     }
 
     @Test
@@ -98,9 +96,8 @@ class CommandInterpreterTest {
         commandInterpreterUnderTest.execute(command, state);
 
         verify(mockBooleanExpressionInterpreter, times(2)).evaluate(Bool.FALSE, state);
-        verify(state, times(1)).put("a", 1L);
-
-        verifyNoInteractions(state);
+        verify(state).put("a", 1L);
+        verifyNoMoreInteractions(state);
     }
 
     private CommandInterpreter newCommandInterpreterUnderTest() {
