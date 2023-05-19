@@ -8,16 +8,16 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @ExtendWith(MockitoExtension.class)
-public class BooleanTest {
+public class BoolTest {
 
     @Test
     public void trueConstantShouldEvaluateToTrue() {
-        assertTrue(Boolean.TRUE.eval(null));
+        assertTrue(Bool.TRUE.eval(null));
     }
 
     @Test
     public void falseConstantShouldEvaluateToFalse() {
-        assertFalse(Boolean.FALSE.eval(null));
+        assertFalse(Bool.FALSE.eval(null));
     }
 
 }

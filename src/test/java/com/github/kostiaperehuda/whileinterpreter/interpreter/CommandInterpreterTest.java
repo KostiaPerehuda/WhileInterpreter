@@ -2,7 +2,7 @@ package com.github.kostiaperehuda.whileinterpreter.interpreter;
 
 import com.github.kostiaperehuda.whileinterpreter.ast.aexp.ArithmeticExpression;
 import com.github.kostiaperehuda.whileinterpreter.ast.aexp.Const;
-import com.github.kostiaperehuda.whileinterpreter.ast.bexp.Boolean;
+import com.github.kostiaperehuda.whileinterpreter.ast.bexp.Bool;
 import com.github.kostiaperehuda.whileinterpreter.ast.bexp.BooleanExpression;
 import com.github.kostiaperehuda.whileinterpreter.ast.cmd.*;
 import com.github.kostiaperehuda.whileinterpreter.state.State;
@@ -33,7 +33,7 @@ class CommandInterpreterTest {
     @Test
     void shouldOnlyExecuteIfBranchWhenConditionIsTrue() {
         var state = mock(State.class);
-        var command = new If(Boolean.TRUE,
+        var command = new If(Bool.TRUE,
                 new Assign("a", new Const(1L)),
                 new Assign("b", new Const(2L)));
 
@@ -47,7 +47,7 @@ class CommandInterpreterTest {
     @Test
     void shouldOnlyExecuteElseBranchWhenConditionIsFalse() {
         var state = mock(State.class);
-        var command = new If(Boolean.TRUE,
+        var command = new If(Bool.TRUE,
                 new Assign("a", new Const(1L)),
                 new Assign("b", new Const(2L)));
 
@@ -76,7 +76,7 @@ class CommandInterpreterTest {
     @Test
     void shouldNotEnterLoopBodyWhenConditionIsInitiallyFalse() {
         var state = mock(State.class);
-        var command = new While(Boolean.FALSE,
+        var command = new While(Bool.FALSE,
                 new Assign("a", new Const(1L)));
 
         newCommandInterpreterUnderTest().execute(command, state);
@@ -87,7 +87,7 @@ class CommandInterpreterTest {
     @Test
     void shouldOnlyEnterLoopBodyOnceWhenLoopConditionIsInitiallyTrueAndBecomesFalseAfterOneIteration() {
         var state = mock(State.class);
-        var command = new While(Boolean.FALSE,
+        var command = new While(Bool.FALSE,
                 new Assign("a", new Const(1L)));
 
         var mockBooleanExpressionInterpreter = mock(BooleanExpressionInterpreter.class);
@@ -97,7 +97,7 @@ class CommandInterpreterTest {
 
         commandInterpreterUnderTest.execute(command, state);
 
-        verify(mockBooleanExpressionInterpreter, times(2)).evaluate(Boolean.FALSE, state);
+        verify(mockBooleanExpressionInterpreter, times(2)).evaluate(Bool.FALSE, state);
         verify(state, times(1)).put("a", 1L);
 
         verifyNoInteractions(state);
@@ -123,8 +123,8 @@ class CommandInterpreterTest {
         return new BooleanExpressionInterpreter() {
             @Override
             public boolean evaluate(BooleanExpression expression, State state) {
-                if (expression instanceof Boolean bool) {
-                    return bool == Boolean.TRUE;
+                if (expression instanceof Bool bool) {
+                    return bool == Bool.TRUE;
                 }
                 throw new IllegalArgumentException("This stub can only handle true/false const boolean expressions");
             }

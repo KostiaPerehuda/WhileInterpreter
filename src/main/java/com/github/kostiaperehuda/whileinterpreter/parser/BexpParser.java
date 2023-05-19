@@ -2,7 +2,7 @@ package com.github.kostiaperehuda.whileinterpreter.parser;
 
 import com.github.kostiaperehuda.whileinterpreter.ast.aexp.ArithmeticExpression;
 import com.github.kostiaperehuda.whileinterpreter.ast.bexp.*;
-import com.github.kostiaperehuda.whileinterpreter.ast.bexp.Boolean;
+import com.github.kostiaperehuda.whileinterpreter.ast.bexp.Bool;
 
 import java.util.Deque;
 
@@ -44,10 +44,10 @@ public class BexpParser {
             case KEYWORD:
                 if (t.getData().equals("true")) {
                     tokens.removeFirst();
-                    return Boolean.TRUE;
+                    return Bool.TRUE;
                 } else if (t.getData().equals("false")) {
                     tokens.removeFirst();
-                    return Boolean.FALSE;
+                    return Bool.FALSE;
                 }
 
                 throw new RuntimeException("Syntax error!");

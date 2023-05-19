@@ -2,14 +2,18 @@ package com.github.kostiaperehuda.whileinterpreter.ast.bexp;
 
 import com.github.kostiaperehuda.whileinterpreter.state.State;
 
-public enum Boolean implements BooleanExpression {
+public enum Bool implements BooleanExpression {
 
     TRUE(true), FALSE(false);
 
     private final boolean value;
 
-    Boolean(boolean value) {
+    Bool(boolean value) {
         this.value = value;
+    }
+
+    public boolean value() {
+        return value;
     }
 
     @Override
