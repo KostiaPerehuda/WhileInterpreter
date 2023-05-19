@@ -3,29 +3,23 @@ package com.github.kostiaperehuda.whileinterpreter.interpreter;
 import com.github.kostiaperehuda.whileinterpreter.ast.aexp.*;
 import com.github.kostiaperehuda.whileinterpreter.state.State;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.junit.MockitoJUnitRunner;
-import org.mockito.junit.jupiter.MockitoExtension;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
 
-@ExtendWith(MockitoExtension.class)
-public class ArithmeticExpressionInterpreterTest {
+class ArithmeticExpressionInterpreterTest {
 
     @Test
-    public void shouldExtractTheValueFromTheConstant() {
-        var state = mock(State.class);
+    void shouldExtractTheValueFromTheConstant() {
         var constant = new Const(1L);
 
-        var result = new ArithmeticExpressionInterpreter().evaluate(constant, state);
+        var result = new ArithmeticExpressionInterpreter().evaluate(constant, null);
 
         assertEquals(1L, result);
-        verifyNoInteractions(state);
     }
 
     @Test
-    public void shouldExtractTheValueFromTheVariableByQueryingTheState() {
+    void shouldExtractTheValueFromTheVariableByQueryingTheState() {
         var state = mock(State.class);
         when(state.get("dummy")).thenReturn(1L);
         var variable = new Variable("dummy");
@@ -33,41 +27,35 @@ public class ArithmeticExpressionInterpreterTest {
         var result = new ArithmeticExpressionInterpreter().evaluate(variable, state);
 
         assertEquals(1L, result);
-        verify(state, times(1)).get("dummy");
-        verify(state, never()).put(any(), any());
+        verify(state).get("dummy");
+        verifyNoMoreInteractions(state);
     }
 
     @Test
-    public void shouldEvaluatePlusByComputingTheSumOfItsChildren() {
-        var state = mock(State.class);
+    void shouldEvaluatePlusOperatorByComputingTheSumOfItsOperands() {
         var plus = new Plus(new Const(3L), new Const(5L));
 
-        var result = new ArithmeticExpressionInterpreter().evaluate(plus, state);
+        var result = new ArithmeticExpressionInterpreter().evaluate(plus, null);
 
         assertEquals(8L, result);
-        verifyNoInteractions(state);
     }
 
     @Test
-    public void shouldEvaluateMinusByComputingTheDifferenceOfItsChildren() {
-        var state = mock(State.class);
+    void shouldEvaluateMinusOperatorByComputingTheDifferenceOfItsOperands() {
         var minus = new Minus(new Const(3L), new Const(5L));
 
-        var result = new ArithmeticExpressionInterpreter().evaluate(minus, state);
+        var result = new ArithmeticExpressionInterpreter().evaluate(minus, null);
 
         assertEquals(-2L, result);
-        verifyNoInteractions(state);
     }
 
     @Test
-    public void shouldEvaluateTimesByComputingTheProductOfItsChildren() {
-        var state = mock(State.class);
+    void shouldEvaluateTimesOperatorByComputingTheProductOfItsOperands() {
         var times = new Times(new Const(3L), new Const(5L));
 
-        long result = new ArithmeticExpressionInterpreter().evaluate(times, state);
+        long result = new ArithmeticExpressionInterpreter().evaluate(times, null);
 
         assertEquals(15L, result);
-        verifyNoInteractions(state);
     }
 
 }

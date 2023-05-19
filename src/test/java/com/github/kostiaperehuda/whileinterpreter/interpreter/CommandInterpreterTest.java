@@ -1,36 +1,134 @@
 package com.github.kostiaperehuda.whileinterpreter.interpreter;
 
+import com.github.kostiaperehuda.whileinterpreter.ast.aexp.ArithmeticExpression;
 import com.github.kostiaperehuda.whileinterpreter.ast.aexp.Const;
-import com.github.kostiaperehuda.whileinterpreter.ast.cmd.Assign;
-import com.github.kostiaperehuda.whileinterpreter.ast.cmd.Skip;
+import com.github.kostiaperehuda.whileinterpreter.ast.bexp.Boolean;
+import com.github.kostiaperehuda.whileinterpreter.ast.bexp.BooleanExpression;
+import com.github.kostiaperehuda.whileinterpreter.ast.cmd.*;
 import com.github.kostiaperehuda.whileinterpreter.state.State;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import static org.mockito.Mockito.*;
 
-public class CommandInterpreterTest {
+@ExtendWith(MockitoExtension.class)
+class CommandInterpreterTest {
 
     @Test
-    public void shouldNotAffectProgramStateWhenExecutingSkip() {
-        var state = mock(State.class);
-        var skip = new Skip();
+    void shouldNotAffectProgramStateWhenExecutingSkip() {
+        newCommandInterpreterUnderTest().execute(new Skip(), null);
+    }
 
-        new CommandInterpreter().execute(skip, state);
+    @Test
+    void shouldEvaluateAssignExpressionAndPutItsResultIntoTheProgramStateWhenExecutingAssign() {
+        var state = mock(State.class);
+        var command = new Assign("dummy", new Const(10L));
+
+        newCommandInterpreterUnderTest().execute(command, state);
+
+        verify(state).put("dummy", 10L);
+    }
+
+    @Test
+    void shouldOnlyExecuteIfBranchWhenConditionIsTrue() {
+        var state = mock(State.class);
+        var command = new If(Boolean.TRUE,
+                new Assign("a", new Const(1L)),
+                new Assign("b", new Const(2L)));
+
+        newCommandInterpreterUnderTest().execute(command, state);
+
+        verify(state, times(1)).put("a", 1L);
+        verify(state, never()).put("b", 2L);
+        verify(state, times(1)).put(any(), any());
+    }
+
+    @Test
+    void shouldOnlyExecuteElseBranchWhenConditionIsFalse() {
+        var state = mock(State.class);
+        var command = new If(Boolean.TRUE,
+                new Assign("a", new Const(1L)),
+                new Assign("b", new Const(2L)));
+
+        newCommandInterpreterUnderTest().execute(command, state);
+
+        verify(state, never()).put("a", 1L);
+        verify(state, times(1)).put("b", 2L);
+        verify(state, times(1)).put(any(), any());
+    }
+
+    @Test
+    void shouldExecuteBothChildCommandsOfSequenceInOrder() {
+        var state = mock(State.class);
+        var inOrder = inOrder(state);
+
+        var command = new Sequence(
+                new Assign("a", new Const(1L)),
+                new Assign("b", new Const(2L)));
+
+        newCommandInterpreterUnderTest().execute(command, state);
+
+        inOrder.verify(state).put("a", 1L);
+        inOrder.verify(state).put("b", 2L);
+    }
+
+    @Test
+    void shouldNotEnterLoopBodyWhenConditionIsInitiallyFalse() {
+        var state = mock(State.class);
+        var command = new While(Boolean.FALSE,
+                new Assign("a", new Const(1L)));
+
+        newCommandInterpreterUnderTest().execute(command, state);
 
         verifyNoInteractions(state);
     }
 
     @Test
-    public void shouldEvaluateAssignExpressionAndPutItsResultIntoTheProgramStateWhenExecutingAssign() {
+    void shouldOnlyEnterLoopBodyOnceWhenLoopConditionIsInitiallyTrueAndBecomesFalseAfterOneIteration() {
         var state = mock(State.class);
-        var aExpInterpreter = mock(ArithmeticExpressionInterpreter.class);
-        var expression = new Const(10L);
-        var assign = new Assign("dummy", expression);
+        var command = new While(Boolean.FALSE,
+                new Assign("a", new Const(1L)));
 
-        new CommandInterpreter(aExpInterpreter).execute(assign, state);
+        var mockBooleanExpressionInterpreter = mock(BooleanExpressionInterpreter.class);
+        when(mockBooleanExpressionInterpreter.evaluate(any(), any())).thenReturn(true).thenReturn(false);
+        var commandInterpreterUnderTest =
+                new CommandInterpreter(stubArithmeticExpressionInterpreter(), mockBooleanExpressionInterpreter);
 
-        verify(state, times(1)).put("dummy", 10L);
-        verify(aExpInterpreter, times(1)).evaluate(expression, state);
+        commandInterpreterUnderTest.execute(command, state);
+
+        verify(mockBooleanExpressionInterpreter, times(2)).evaluate(Boolean.FALSE, state);
+        verify(state, times(1)).put("a", 1L);
+
+        verifyNoInteractions(state);
+    }
+
+    private CommandInterpreter newCommandInterpreterUnderTest() {
+        return new CommandInterpreter(stubArithmeticExpressionInterpreter(), stubBooleanExpressionInterpreter());
+    }
+
+    private ArithmeticExpressionInterpreter stubArithmeticExpressionInterpreter() {
+        return new ArithmeticExpressionInterpreter() {
+            @Override
+            public long evaluate(ArithmeticExpression expression, State state) {
+                if (expression instanceof Const constant) {
+                    return constant.number();
+                }
+                throw new IllegalArgumentException("This stub can only handle constant arithmetic expressions");
+            }
+        };
+    }
+
+    private BooleanExpressionInterpreter stubBooleanExpressionInterpreter() {
+        return new BooleanExpressionInterpreter() {
+            @Override
+            public boolean evaluate(BooleanExpression expression, State state) {
+                if (expression instanceof Boolean bool) {
+                    return bool == Boolean.TRUE;
+                }
+                throw new IllegalArgumentException("This stub can only handle true/false const boolean expressions");
+            }
+        };
     }
 
 }
