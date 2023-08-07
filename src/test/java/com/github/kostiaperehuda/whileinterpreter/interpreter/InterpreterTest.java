@@ -49,4 +49,19 @@ class InterpreterTest {
         );
     }
 
+    @Test
+    void shouldExtractTheValueFromTheVariableByQueryingTheState() {
+        var state = mock(State.class);
+        when(state.get(any())).thenReturn(BigInteger.TWO);
+        var inOrder = inOrder(state);
+
+        var assignment = new Assign("result", new Variable("variable"));
+
+        new Interpreter().execute(assignment, state);
+
+        inOrder.verify(state).get("variable");
+        inOrder.verify(state).put("result", BigInteger.TWO);
+        verifyNoMoreInteractions(state);
+    }
+
 }

@@ -10,8 +10,12 @@ import java.math.BigInteger;
 
 public class Interpreter {
 
+    private State state;
+
     public void execute(Command command, State state) {
         if (command instanceof Skip) return;
+
+        this.state = state;
 
         if (command instanceof Assign assign) {
             state.put(assign.variableName(), evaluate(assign.expression()));
@@ -21,6 +25,8 @@ public class Interpreter {
     private BigInteger evaluate(ArithmeticExpression expression) {
         if (expression instanceof Const constant) {
             return constant.number();
+        } else if (expression instanceof Variable variable) {
+            return state.get(variable.name());
         } else if (expression instanceof Plus plus) {
             return evaluate(plus.left()).add(evaluate(plus.right()));
         } else if (expression instanceof Minus minus) {
