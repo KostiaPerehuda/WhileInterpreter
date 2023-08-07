@@ -1,6 +1,7 @@
 package com.github.kostiaperehuda.whileinterpreter.interpreter;
 
 import com.github.kostiaperehuda.whileinterpreter.ast.aexp.Const;
+import com.github.kostiaperehuda.whileinterpreter.ast.aexp.Plus;
 import com.github.kostiaperehuda.whileinterpreter.ast.cmd.Assign;
 import com.github.kostiaperehuda.whileinterpreter.ast.cmd.Skip;
 import com.github.kostiaperehuda.whileinterpreter.state.State;
@@ -15,9 +16,9 @@ class InterpreterTest {
     @Test
     void shouldNotAffectProgramStateWhenExecutingSkipInstruction() {
         var state = mock(State.class);
-        var command = new Skip();
+        var skip = new Skip();
 
-        new Interpreter().execute(command, state);
+        new Interpreter().execute(skip, null);
 
         verifyNoInteractions(state);
     }
@@ -25,11 +26,24 @@ class InterpreterTest {
     @Test
     void shouldEvaluateConstantExpressionAndPutItsResultIntoTheProgramStateWhenExecutingAssignInstruction() {
         var state = mock(State.class);
-        var command = new Assign("dummy", new Const(BigInteger.TEN));
+        var assignment = new Assign("result", new Const(BigInteger.TEN));
 
-        new Interpreter().execute(command, state);
+        new Interpreter().execute(assignment, state);
 
-        verify(state).put("dummy", BigInteger.TEN);
+        verify(state).put("result", BigInteger.TEN);
+        verifyNoMoreInteractions(state);
+    }
+
+    @Test
+    void shouldEvaluatePlusOperatorByComputingTheSumOfItsOperands() {
+        var state = mock(State.class);
+        var onePlusTwo = new Plus(new Const(BigInteger.ONE), new Const(BigInteger.TWO));
+        var assignment = new Assign("result", onePlusTwo);
+
+        new Interpreter().execute(assignment, state);
+
+        verify(state).put("result", BigInteger.valueOf(3));
+        verifyNoMoreInteractions(state);
     }
 
 }
