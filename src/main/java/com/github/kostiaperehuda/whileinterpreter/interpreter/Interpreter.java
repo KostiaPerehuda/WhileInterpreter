@@ -1,9 +1,6 @@
 package com.github.kostiaperehuda.whileinterpreter.interpreter;
 
-import com.github.kostiaperehuda.whileinterpreter.ast.aexp.ArithmeticExpression;
-import com.github.kostiaperehuda.whileinterpreter.ast.aexp.Const;
-import com.github.kostiaperehuda.whileinterpreter.ast.aexp.Minus;
-import com.github.kostiaperehuda.whileinterpreter.ast.aexp.Plus;
+import com.github.kostiaperehuda.whileinterpreter.ast.aexp.*;
 import com.github.kostiaperehuda.whileinterpreter.ast.cmd.Assign;
 import com.github.kostiaperehuda.whileinterpreter.ast.cmd.Command;
 import com.github.kostiaperehuda.whileinterpreter.ast.cmd.Skip;
@@ -28,6 +25,8 @@ public class Interpreter {
             return evaluate(plus.left()).add(evaluate(plus.right()));
         } else if (expression instanceof Minus minus) {
             return evaluate(minus.left()).subtract(evaluate(minus.right()));
+        } else if (expression instanceof Multiply multiply) {
+            return evaluate(multiply.left()).multiply(evaluate(multiply.right()));
         } else {
             throw new IllegalArgumentException(expression.toString());
         }

@@ -51,7 +51,7 @@ public class AexpParser {
 
             if (t.getData().equals("*")) {
                 tokens.removeFirst();
-                exp = new Times(exp, parseAtom(tokens));
+                exp = new Multiply(exp, parseAtom(tokens));
             } else {
                 break;
             }

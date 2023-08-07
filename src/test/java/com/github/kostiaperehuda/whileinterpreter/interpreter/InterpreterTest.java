@@ -1,9 +1,6 @@
 package com.github.kostiaperehuda.whileinterpreter.interpreter;
 
-import com.github.kostiaperehuda.whileinterpreter.ast.aexp.ArithmeticExpression;
-import com.github.kostiaperehuda.whileinterpreter.ast.aexp.Const;
-import com.github.kostiaperehuda.whileinterpreter.ast.aexp.Minus;
-import com.github.kostiaperehuda.whileinterpreter.ast.aexp.Plus;
+import com.github.kostiaperehuda.whileinterpreter.ast.aexp.*;
 import com.github.kostiaperehuda.whileinterpreter.ast.cmd.Assign;
 import com.github.kostiaperehuda.whileinterpreter.ast.cmd.Skip;
 import com.github.kostiaperehuda.whileinterpreter.state.State;
@@ -47,7 +44,8 @@ class InterpreterTest {
         return Stream.of(
                 Arguments.of(new Const(BigInteger.TEN), BigInteger.TEN),
                 Arguments.of(new Plus(new Const(BigInteger.ONE), new Const(BigInteger.TWO)), BigInteger.valueOf(3)),
-                Arguments.of(new Minus(new Const(BigInteger.ONE), new Const(BigInteger.TWO)), BigInteger.valueOf(-1))
+                Arguments.of(new Minus(new Const(BigInteger.ONE), new Const(BigInteger.TWO)), BigInteger.valueOf(-1)),
+                Arguments.of(new Multiply(new Const(BigInteger.TEN), new Const(BigInteger.TWO)), BigInteger.valueOf(20))
         );
     }
 
