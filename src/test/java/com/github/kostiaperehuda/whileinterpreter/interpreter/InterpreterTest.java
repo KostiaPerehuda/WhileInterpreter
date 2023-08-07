@@ -1,6 +1,7 @@
 package com.github.kostiaperehuda.whileinterpreter.interpreter;
 
 import com.github.kostiaperehuda.whileinterpreter.ast.aexp.Const;
+import com.github.kostiaperehuda.whileinterpreter.ast.aexp.Minus;
 import com.github.kostiaperehuda.whileinterpreter.ast.aexp.Plus;
 import com.github.kostiaperehuda.whileinterpreter.ast.cmd.Assign;
 import com.github.kostiaperehuda.whileinterpreter.ast.cmd.Skip;
@@ -43,6 +44,18 @@ class InterpreterTest {
         new Interpreter().execute(assignment, state);
 
         verify(state).put("result", BigInteger.valueOf(3));
+        verifyNoMoreInteractions(state);
+    }
+
+    @Test
+    void shouldEvaluateMinusOperatorByComputingTheDifferenceOfItsOperands() {
+        var state = mock(State.class);
+        var oneMinusTwo = new Minus(new Const(BigInteger.ONE), new Const(BigInteger.TWO));
+        var assignment = new Assign("result", oneMinusTwo);
+
+        new Interpreter().execute(assignment, state);
+
+        verify(state).put("result", BigInteger.valueOf(-1));
         verifyNoMoreInteractions(state);
     }
 

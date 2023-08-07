@@ -2,6 +2,7 @@ package com.github.kostiaperehuda.whileinterpreter.interpreter;
 
 import com.github.kostiaperehuda.whileinterpreter.ast.aexp.ArithmeticExpression;
 import com.github.kostiaperehuda.whileinterpreter.ast.aexp.Const;
+import com.github.kostiaperehuda.whileinterpreter.ast.aexp.Minus;
 import com.github.kostiaperehuda.whileinterpreter.ast.aexp.Plus;
 import com.github.kostiaperehuda.whileinterpreter.ast.cmd.Assign;
 import com.github.kostiaperehuda.whileinterpreter.ast.cmd.Command;
@@ -25,6 +26,8 @@ public class Interpreter {
             return constant.number();
         } else if (expression instanceof Plus plus) {
             return evaluate(plus.left()).add(evaluate(plus.right()));
+        } else if (expression instanceof Minus minus) {
+            return evaluate(minus.left()).subtract(evaluate(minus.right()));
         } else {
             throw new IllegalArgumentException(expression.toString());
         }
