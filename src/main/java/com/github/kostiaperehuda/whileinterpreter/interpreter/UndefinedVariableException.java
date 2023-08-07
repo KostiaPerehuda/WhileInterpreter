@@ -1,4 +1,4 @@
-package com.github.kostiaperehuda.whileinterpreter.state;
+package com.github.kostiaperehuda.whileinterpreter.interpreter;
 
 import java.io.Serial;
 

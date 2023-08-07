@@ -5,32 +5,46 @@ import com.github.kostiaperehuda.whileinterpreter.ast.cmd.Assign;
 import com.github.kostiaperehuda.whileinterpreter.ast.cmd.Command;
 import com.github.kostiaperehuda.whileinterpreter.ast.cmd.Sequence;
 import com.github.kostiaperehuda.whileinterpreter.ast.cmd.Skip;
-import com.github.kostiaperehuda.whileinterpreter.state.State;
 
 import java.math.BigInteger;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Optional;
 
 public class Interpreter {
 
-    private State state;
+    private final Map<String, BigInteger> state;
 
-    public void execute(Command command, State state) {
-        if (command instanceof Skip) return;
+    public Interpreter() {
+        this(new HashMap<>());
+    }
 
+    public Interpreter(Map<String, BigInteger> state) {
         this.state = state;
+    }
 
+    public Map<String, BigInteger> execute(Command command) {
+        if (command instanceof Skip) {
+            return state;
+        }
         if (command instanceof Assign assign) {
             state.put(assign.variableName(), evaluate(assign.expression()));
-        } else if (command instanceof Sequence sequence) {
-            execute(sequence.first(), state);
-            execute(sequence.second(), state);
+            return state;
         }
+        if (command instanceof Sequence sequence) {
+            execute(sequence.first());
+            execute(sequence.second());
+            return state;
+        }
+        return state;
     }
 
     private BigInteger evaluate(ArithmeticExpression expression) {
         if (expression instanceof Const constant) {
             return constant.number();
         } else if (expression instanceof Variable variable) {
-            return state.get(variable.name());
+            return Optional.ofNullable(state.get(variable.name())).orElseThrow(() ->
+                    new UndefinedVariableException(variable.name()));
         } else if (expression instanceof Plus plus) {
             return evaluate(plus.left()).add(evaluate(plus.right()));
         } else if (expression instanceof Minus minus) {

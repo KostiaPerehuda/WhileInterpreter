@@ -2,29 +2,33 @@ package com.github.kostiaperehuda.whileinterpreter.interpreter;
 
 import com.github.kostiaperehuda.whileinterpreter.ast.aexp.*;
 import com.github.kostiaperehuda.whileinterpreter.ast.cmd.Assign;
+import com.github.kostiaperehuda.whileinterpreter.ast.cmd.Command;
 import com.github.kostiaperehuda.whileinterpreter.ast.cmd.Sequence;
 import com.github.kostiaperehuda.whileinterpreter.ast.cmd.Skip;
-import com.github.kostiaperehuda.whileinterpreter.state.State;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 
 import java.math.BigInteger;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.stream.Stream;
 
-import static org.mockito.Mockito.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class InterpreterTest {
 
     @Test
     void shouldNotAffectProgramStateWhenExecutingSkipInstruction() {
-        var state = mock(State.class);
-        var skip = new Skip();
+        Map<String, BigInteger> initialState = Collections.emptyMap(); // Immutable
+        Command skip = new Skip();
 
-        new Interpreter().execute(skip, state);
+        var finalState = new Interpreter(initialState).execute(skip);
 
-        verifyNoInteractions(state);
+        assertEquals(initialState, finalState);
     }
 
     @ParameterizedTest
@@ -32,13 +36,14 @@ class InterpreterTest {
     void shouldEvaluateArithmeticExpressionAndPutItsResultIntoTheProgramStateWhenExecutingAssignInstruction(
             ArithmeticExpression expression, BigInteger expectedResult
     ) {
-        var state = mock(State.class);
-        var assignment = new Assign("result", expression);
+        Command assignment = new Assign("result", expression);
 
-        new Interpreter().execute(assignment, state);
+        Map<String, BigInteger> initialState = new HashMap<>();
 
-        verify(state).put("result", expectedResult);
-        verifyNoMoreInteractions(state);
+        Interpreter interpreter = new Interpreter(initialState);
+        Map<String, BigInteger> finalState = interpreter.execute(assignment);
+
+        assertEquals(Map.of("result", expectedResult), finalState);
     }
 
     static Stream<Arguments> arithmeticExpressionsWithExpectedResults() {
@@ -52,33 +57,53 @@ class InterpreterTest {
 
     @Test
     void shouldExtractTheValueFromTheVariableByQueryingTheState() {
-        var state = mock(State.class);
-        when(state.get(any())).thenReturn(BigInteger.TWO);
-        var inOrder = inOrder(state);
+        Command assignment = new Assign("result", new Variable("variable"));
 
-        var assignment = new Assign("result", new Variable("variable"));
+        Map<String, BigInteger> initialState = new HashMap<>();
+        initialState.put("variable", BigInteger.TWO);
 
-        new Interpreter().execute(assignment, state);
+        Interpreter interpreter = new Interpreter(initialState);
+        Map<String, BigInteger> finalState = interpreter.execute(assignment);
 
-        inOrder.verify(state).get("variable");
-        inOrder.verify(state).put("result", BigInteger.TWO);
-        verifyNoMoreInteractions(state);
+        assertEquals(Map.of("variable", BigInteger.TWO, "result", BigInteger.TWO), finalState);
     }
 
     @Test
-    void shouldExecuteBothChildCommandsOfSequenceInOrder() {
-        var state = mock(State.class);
-        var inOrder = inOrder(state);
+    void shouldThrowExceptionWhenExtractingUndefinedVariableFromTheState() {
+        Command assignment = new Assign("result", new Variable("variable"));
 
-        var sequence = new Sequence(
+        Map<String, BigInteger> initialState = Collections.emptyMap();
+
+        Interpreter interpreter = new Interpreter(initialState);
+        assertThrows(UndefinedVariableException.class, () -> interpreter.execute(assignment));
+    }
+
+    @Test
+    void shouldExecuteBothChildCommandsOfSequence() {
+        Command sequence = new Sequence(
                 new Assign("one", new Const(BigInteger.ONE)),
                 new Assign("two", new Const(BigInteger.TWO)));
 
-        new Interpreter().execute(sequence, state);
+        Map<String, BigInteger> initialState = new HashMap<>();
 
-        inOrder.verify(state).put("one", BigInteger.ONE);
-        inOrder.verify(state).put("two", BigInteger.TWO);
-        inOrder.verifyNoMoreInteractions();
+        Interpreter interpreter = new Interpreter(initialState);
+        Map<String, BigInteger> finalState = interpreter.execute(sequence);
+
+        assertEquals(Map.of("one", BigInteger.ONE, "two", BigInteger.TWO), finalState);
+    }
+
+    @Test
+    void shouldExecuteChildCommandsOfSequenceInOrder() {
+        Command sequence = new Sequence(
+                new Assign("one", new Const(BigInteger.ONE)),
+                new Assign("one", new Const(BigInteger.TWO)));
+
+        Map<String, BigInteger> initialState = new HashMap<>();
+
+        Interpreter interpreter = new Interpreter(initialState);
+        Map<String, BigInteger> finalState = interpreter.execute(sequence);
+
+        assertEquals(Map.of("one", BigInteger.TWO), finalState);
     }
 
 }
