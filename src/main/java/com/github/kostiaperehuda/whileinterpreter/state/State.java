@@ -1,10 +1,12 @@
 package com.github.kostiaperehuda.whileinterpreter.state;
 
+import java.math.BigInteger;
+
 public interface State {
 
-    long get(String variable) throws UndefinedVariableException;
+    BigInteger get(String variable) throws UndefinedVariableException;
 
-    void put(String variable, long value);
+    void put(String variable, BigInteger value);
 
     String toString();
 

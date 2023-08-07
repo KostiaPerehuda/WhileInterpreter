@@ -1,19 +1,16 @@
 package com.github.kostiaperehuda.whileinterpreter.state;
 
+import java.math.BigInteger;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.Collectors;
 
 public class InMemoryState implements State {
 
-    private Map<String, Long> map;
-
-    public InMemoryState() {
-        map = new HashMap<>();
-    }
+    private final Map<String, BigInteger> map = new HashMap<>();
 
     @Override
-    public long get(String variable) throws UndefinedVariableException {
+    public BigInteger get(String variable) throws UndefinedVariableException {
         if (!map.containsKey(variable)) {
             throw new UndefinedVariableException("Variable " + variable + " is not defined!");
         }
@@ -21,7 +18,7 @@ public class InMemoryState implements State {
     }
 
     @Override
-    public void put(String variable, long value) {
+    public void put(String variable, BigInteger value) {
         map.put(variable, value);
     }
 

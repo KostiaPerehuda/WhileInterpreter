@@ -2,6 +2,7 @@ package com.github.kostiaperehuda.whileinterpreter.parser;
 
 import com.github.kostiaperehuda.whileinterpreter.ast.aexp.*;
 
+import java.math.BigInteger;
 import java.util.Deque;
 
 public class AexpParser {
@@ -71,7 +72,7 @@ public class AexpParser {
 
             case NUMBER:
                 tokens.removeFirst();
-                return new Const(Long.valueOf(t.getData()));
+                return new Const(new BigInteger(t.getData()));
 
             case CONTROL_SYMBOL:
                 if (t.getData().equals("(")) {

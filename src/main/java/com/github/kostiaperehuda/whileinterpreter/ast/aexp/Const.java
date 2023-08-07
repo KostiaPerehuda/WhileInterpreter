@@ -1,3 +1,5 @@
 package com.github.kostiaperehuda.whileinterpreter.ast.aexp;
 
-public record Const(long number) implements ArithmeticExpression {}
+import java.math.BigInteger;
+
+public record Const(BigInteger number) implements ArithmeticExpression {}
