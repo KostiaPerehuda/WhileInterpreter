@@ -1,5 +1,6 @@
 package com.github.kostiaperehuda.whileinterpreter.interpreter;
 
+import com.github.kostiaperehuda.whileinterpreter.ast.aexp.ArithmeticExpression;
 import com.github.kostiaperehuda.whileinterpreter.ast.aexp.Const;
 import com.github.kostiaperehuda.whileinterpreter.ast.aexp.Minus;
 import com.github.kostiaperehuda.whileinterpreter.ast.aexp.Plus;
@@ -7,8 +8,12 @@ import com.github.kostiaperehuda.whileinterpreter.ast.cmd.Assign;
 import com.github.kostiaperehuda.whileinterpreter.ast.cmd.Skip;
 import com.github.kostiaperehuda.whileinterpreter.state.State;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
 
 import java.math.BigInteger;
+import java.util.stream.Stream;
 
 import static org.mockito.Mockito.*;
 
@@ -24,39 +29,26 @@ class InterpreterTest {
         verifyNoInteractions(state);
     }
 
-    @Test
-    void shouldEvaluateConstantExpressionAndPutItsResultIntoTheProgramStateWhenExecutingAssignInstruction() {
+    @ParameterizedTest
+    @MethodSource("arithmeticExpressionsWithExpectedResults")
+    void shouldEvaluateArithmeticExpressionAndPutItsResultIntoTheProgramStateWhenExecutingAssignInstruction(
+            ArithmeticExpression expression, BigInteger expectedResult
+    ) {
         var state = mock(State.class);
-        var assignment = new Assign("result", new Const(BigInteger.TEN));
+        var assignment = new Assign("result", expression);
 
         new Interpreter().execute(assignment, state);
 
-        verify(state).put("result", BigInteger.TEN);
+        verify(state).put("result", expectedResult);
         verifyNoMoreInteractions(state);
     }
 
-    @Test
-    void shouldEvaluatePlusOperatorByComputingTheSumOfItsOperands() {
-        var state = mock(State.class);
-        var onePlusTwo = new Plus(new Const(BigInteger.ONE), new Const(BigInteger.TWO));
-        var assignment = new Assign("result", onePlusTwo);
-
-        new Interpreter().execute(assignment, state);
-
-        verify(state).put("result", BigInteger.valueOf(3));
-        verifyNoMoreInteractions(state);
-    }
-
-    @Test
-    void shouldEvaluateMinusOperatorByComputingTheDifferenceOfItsOperands() {
-        var state = mock(State.class);
-        var oneMinusTwo = new Minus(new Const(BigInteger.ONE), new Const(BigInteger.TWO));
-        var assignment = new Assign("result", oneMinusTwo);
-
-        new Interpreter().execute(assignment, state);
-
-        verify(state).put("result", BigInteger.valueOf(-1));
-        verifyNoMoreInteractions(state);
+    static Stream<Arguments> arithmeticExpressionsWithExpectedResults() {
+        return Stream.of(
+                Arguments.of(new Const(BigInteger.TEN), BigInteger.TEN),
+                Arguments.of(new Plus(new Const(BigInteger.ONE), new Const(BigInteger.TWO)), BigInteger.valueOf(3)),
+                Arguments.of(new Minus(new Const(BigInteger.ONE), new Const(BigInteger.TWO)), BigInteger.valueOf(-1))
+        );
     }
 
 }
