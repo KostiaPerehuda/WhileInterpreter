@@ -2,6 +2,7 @@ package com.github.kostiaperehuda.whileinterpreter.interpreter;
 
 import com.github.kostiaperehuda.whileinterpreter.ast.aexp.*;
 import com.github.kostiaperehuda.whileinterpreter.ast.cmd.Assign;
+import com.github.kostiaperehuda.whileinterpreter.ast.cmd.Sequence;
 import com.github.kostiaperehuda.whileinterpreter.ast.cmd.Skip;
 import com.github.kostiaperehuda.whileinterpreter.state.State;
 import org.junit.jupiter.api.Test;
@@ -21,7 +22,7 @@ class InterpreterTest {
         var state = mock(State.class);
         var skip = new Skip();
 
-        new Interpreter().execute(skip, null);
+        new Interpreter().execute(skip, state);
 
         verifyNoInteractions(state);
     }
@@ -62,6 +63,22 @@ class InterpreterTest {
         inOrder.verify(state).get("variable");
         inOrder.verify(state).put("result", BigInteger.TWO);
         verifyNoMoreInteractions(state);
+    }
+
+    @Test
+    void shouldExecuteBothChildCommandsOfSequenceInOrder() {
+        var state = mock(State.class);
+        var inOrder = inOrder(state);
+
+        var sequence = new Sequence(
+                new Assign("one", new Const(BigInteger.ONE)),
+                new Assign("two", new Const(BigInteger.TWO)));
+
+        new Interpreter().execute(sequence, state);
+
+        inOrder.verify(state).put("one", BigInteger.ONE);
+        inOrder.verify(state).put("two", BigInteger.TWO);
+        inOrder.verifyNoMoreInteractions();
     }
 
 }

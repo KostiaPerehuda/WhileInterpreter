@@ -3,6 +3,7 @@ package com.github.kostiaperehuda.whileinterpreter.interpreter;
 import com.github.kostiaperehuda.whileinterpreter.ast.aexp.*;
 import com.github.kostiaperehuda.whileinterpreter.ast.cmd.Assign;
 import com.github.kostiaperehuda.whileinterpreter.ast.cmd.Command;
+import com.github.kostiaperehuda.whileinterpreter.ast.cmd.Sequence;
 import com.github.kostiaperehuda.whileinterpreter.ast.cmd.Skip;
 import com.github.kostiaperehuda.whileinterpreter.state.State;
 
@@ -19,6 +20,9 @@ public class Interpreter {
 
         if (command instanceof Assign assign) {
             state.put(assign.variableName(), evaluate(assign.expression()));
+        } else if (command instanceof Sequence sequence) {
+            execute(sequence.first(), state);
+            execute(sequence.second(), state);
         }
     }
 
