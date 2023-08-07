@@ -36,24 +36,27 @@ public class Interpreter {
             execute(sequence.second());
             return state;
         }
-        return state;
+        throw new IllegalArgumentException(state.toString());
     }
 
     private BigInteger evaluate(ArithmeticExpression expression) {
         if (expression instanceof Const constant) {
             return constant.number();
-        } else if (expression instanceof Variable variable) {
+        }
+        if (expression instanceof Variable variable) {
             return Optional.ofNullable(state.get(variable.name())).orElseThrow(() ->
                     new UndefinedVariableException(variable.name()));
-        } else if (expression instanceof Plus plus) {
-            return evaluate(plus.left()).add(evaluate(plus.right()));
-        } else if (expression instanceof Minus minus) {
-            return evaluate(minus.left()).subtract(evaluate(minus.right()));
-        } else if (expression instanceof Multiply multiply) {
-            return evaluate(multiply.left()).multiply(evaluate(multiply.right()));
-        } else {
-            throw new IllegalArgumentException(expression.toString());
         }
+        if (expression instanceof Plus plus) {
+            return evaluate(plus.left()).add(evaluate(plus.right()));
+        }
+        if (expression instanceof Minus minus) {
+            return evaluate(minus.left()).subtract(evaluate(minus.right()));
+        }
+        if (expression instanceof Multiply multiply) {
+            return evaluate(multiply.left()).multiply(evaluate(multiply.right()));
+        }
+        throw new IllegalArgumentException(expression.toString());
     }
 
     public static void run(String[] args) {

@@ -23,10 +23,11 @@ class InterpreterTest {
 
     @Test
     void shouldNotAffectProgramStateWhenExecutingSkipInstruction() {
-        Map<String, BigInteger> initialState = Collections.emptyMap(); // Immutable
         Command skip = new Skip();
+        Map<String, BigInteger> initialState = Collections.emptyMap(); // Immutable
 
-        var finalState = new Interpreter(initialState).execute(skip);
+        Interpreter interpreter = new Interpreter(initialState);
+        Map<String, BigInteger> finalState = interpreter.execute(skip);
 
         assertEquals(initialState, finalState);
     }
@@ -38,9 +39,7 @@ class InterpreterTest {
     ) {
         Command assignment = new Assign("result", expression);
 
-        Map<String, BigInteger> initialState = new HashMap<>();
-
-        Interpreter interpreter = new Interpreter(initialState);
+        Interpreter interpreter = new Interpreter();
         Map<String, BigInteger> finalState = interpreter.execute(assignment);
 
         assertEquals(Map.of("result", expectedResult), finalState);
@@ -72,9 +71,7 @@ class InterpreterTest {
     void shouldThrowExceptionWhenExtractingUndefinedVariableFromTheState() {
         Command assignment = new Assign("result", new Variable("variable"));
 
-        Map<String, BigInteger> initialState = Collections.emptyMap();
-
-        Interpreter interpreter = new Interpreter(initialState);
+        Interpreter interpreter = new Interpreter();
         assertThrows(UndefinedVariableException.class, () -> interpreter.execute(assignment));
     }
 
@@ -84,9 +81,7 @@ class InterpreterTest {
                 new Assign("one", new Const(BigInteger.ONE)),
                 new Assign("two", new Const(BigInteger.TWO)));
 
-        Map<String, BigInteger> initialState = new HashMap<>();
-
-        Interpreter interpreter = new Interpreter(initialState);
+        Interpreter interpreter = new Interpreter();
         Map<String, BigInteger> finalState = interpreter.execute(sequence);
 
         assertEquals(Map.of("one", BigInteger.ONE, "two", BigInteger.TWO), finalState);
@@ -98,9 +93,7 @@ class InterpreterTest {
                 new Assign("one", new Const(BigInteger.ONE)),
                 new Assign("one", new Const(BigInteger.TWO)));
 
-        Map<String, BigInteger> initialState = new HashMap<>();
-
-        Interpreter interpreter = new Interpreter(initialState);
+        Interpreter interpreter = new Interpreter();
         Map<String, BigInteger> finalState = interpreter.execute(sequence);
 
         assertEquals(Map.of("one", BigInteger.TWO), finalState);
