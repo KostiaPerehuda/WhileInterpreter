@@ -1,6 +1,7 @@
 package com.github.kostiaperehuda.whileinterpreter.interpreter;
 
 import com.github.kostiaperehuda.whileinterpreter.ast.aexp.*;
+import com.github.kostiaperehuda.whileinterpreter.ast.bexp.And;
 import com.github.kostiaperehuda.whileinterpreter.ast.bexp.Bool;
 import com.github.kostiaperehuda.whileinterpreter.ast.bexp.BooleanExpression;
 import com.github.kostiaperehuda.whileinterpreter.ast.bexp.Not;
@@ -18,7 +19,6 @@ import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assumptions.assumeTrue;
 
 class InterpreterTest {
 
@@ -143,7 +143,11 @@ class InterpreterTest {
     static Stream<Arguments> compoundBooleanExpressionsWithExpectedResults() {
         return Stream.of(
                 Arguments.of(new Not(Bool.TRUE), false),
-                Arguments.of(new Not(Bool.FALSE), true)
+                Arguments.of(new Not(Bool.FALSE), true),
+                Arguments.of(new And(Bool.TRUE, Bool.TRUE), true),
+                Arguments.of(new And(Bool.TRUE, Bool.FALSE), false),
+                Arguments.of(new And(Bool.FALSE, Bool.TRUE), false),
+                Arguments.of(new And(Bool.FALSE, Bool.FALSE), false)
         );
     }
 

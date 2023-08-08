@@ -1,6 +1,7 @@
 package com.github.kostiaperehuda.whileinterpreter.interpreter;
 
 import com.github.kostiaperehuda.whileinterpreter.ast.aexp.*;
+import com.github.kostiaperehuda.whileinterpreter.ast.bexp.And;
 import com.github.kostiaperehuda.whileinterpreter.ast.bexp.Bool;
 import com.github.kostiaperehuda.whileinterpreter.ast.bexp.BooleanExpression;
 import com.github.kostiaperehuda.whileinterpreter.ast.bexp.Not;
@@ -52,6 +53,9 @@ public class Interpreter {
         }
         if (expression instanceof Not not) {
             return !evaluate(not.operand());
+        }
+        if (expression instanceof And and) {
+            return evaluate(and.left()) && evaluate(and.right());
         }
         throw new IllegalArgumentException(expression.toString());
     }
