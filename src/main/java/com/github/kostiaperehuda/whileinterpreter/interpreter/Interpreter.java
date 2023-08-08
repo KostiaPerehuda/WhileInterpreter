@@ -74,8 +74,8 @@ public class Interpreter {
             return constant.number();
         }
         if (expression instanceof Variable variable) {
-            return Optional.ofNullable(state.get(variable.name())).orElseThrow(() ->
-                    new UndefinedVariableException(variable.name()));
+            return Optional.ofNullable(state.get(variable.name()))
+                    .orElseThrow(() -> new UndefinedVariableException(variable.name()));
         }
         if (expression instanceof Plus plus) {
             return evaluate(plus.left()).add(evaluate(plus.right()));
@@ -87,10 +87,6 @@ public class Interpreter {
             return evaluate(multiply.left()).multiply(evaluate(multiply.right()));
         }
         throw new IllegalArgumentException(expression.toString());
-    }
-
-    public static void run(String[] args) {
-        /* TODO: implement */
     }
 
 }
