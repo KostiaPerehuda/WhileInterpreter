@@ -1,10 +1,8 @@
 package com.github.kostiaperehuda.whileinterpreter.interpreter;
 
 import com.github.kostiaperehuda.whileinterpreter.ast.aexp.*;
-import com.github.kostiaperehuda.whileinterpreter.ast.cmd.Assign;
-import com.github.kostiaperehuda.whileinterpreter.ast.cmd.Command;
-import com.github.kostiaperehuda.whileinterpreter.ast.cmd.Sequence;
-import com.github.kostiaperehuda.whileinterpreter.ast.cmd.Skip;
+import com.github.kostiaperehuda.whileinterpreter.ast.bexp.Bool;
+import com.github.kostiaperehuda.whileinterpreter.ast.cmd.*;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
@@ -18,11 +16,12 @@ import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assumptions.assumeTrue;
 
 class InterpreterTest {
 
     @Test
-    void shouldNotAffectProgramStateWhenExecutingSkipInstruction() {
+    void shouldNotModifyProgramStateWhenExecutingSkipCommand() {
         Command skip = new Skip();
         Map<String, BigInteger> initialState = Collections.emptyMap(); // Immutable
 
@@ -34,7 +33,7 @@ class InterpreterTest {
 
     @ParameterizedTest
     @MethodSource("arithmeticExpressionsWithExpectedResults")
-    void shouldEvaluateArithmeticExpressionAndPutItsResultIntoTheProgramStateWhenExecutingAssignInstruction(
+    void shouldPutTheResultOfArithmeticExpressionIntoTheProgramStateWhenExecutingAssignCommand(
             ArithmeticExpression expression, BigInteger expectedResult
     ) {
         Command assignment = new Assign("result", expression);
@@ -55,7 +54,7 @@ class InterpreterTest {
     }
 
     @Test
-    void shouldExtractTheValueFromTheVariableByQueryingTheState() {
+    void shouldExtractTheValueFromTheVariableByQueryingTheProgramState() {
         Command assignment = new Assign("result", new Variable("variable"));
 
         Map<String, BigInteger> initialState = new HashMap<>();
@@ -68,7 +67,7 @@ class InterpreterTest {
     }
 
     @Test
-    void shouldThrowExceptionWhenExtractingUndefinedVariableFromTheState() {
+    void shouldThrowExceptionWhenExtractingUndefinedVariableFromTheProgramState() {
         Command assignment = new Assign("result", new Variable("variable"));
 
         Interpreter interpreter = new Interpreter();
@@ -76,7 +75,7 @@ class InterpreterTest {
     }
 
     @Test
-    void shouldExecuteBothChildCommandsOfSequence() {
+    void shouldExecuteBothChildCommandsOfSequenceCommand() {
         Command sequence = new Sequence(
                 new Assign("one", new Const(BigInteger.ONE)),
                 new Assign("two", new Const(BigInteger.TWO)));
@@ -88,7 +87,7 @@ class InterpreterTest {
     }
 
     @Test
-    void shouldExecuteChildCommandsOfSequenceInOrder() {
+    void shouldExecuteChildCommandsOfSequenceCommandInOrder() {
         Command sequence = new Sequence(
                 new Assign("one", new Const(BigInteger.ONE)),
                 new Assign("one", new Const(BigInteger.TWO)));
@@ -97,6 +96,39 @@ class InterpreterTest {
         Map<String, BigInteger> finalState = interpreter.execute(sequence);
 
         assertEquals(Map.of("one", BigInteger.TWO), finalState);
+    }
+
+    @Test
+    void shouldOnlyExecuteIfBranchWhenConditionIsTrue() {
+        Command ifStatement = new If(Bool.TRUE,
+                new Assign("ifBranchTaken", new Const(BigInteger.ONE)),
+                new Assign("elseBranchTaken", new Const(BigInteger.ONE)));
+
+        Interpreter interpreter = new Interpreter();
+        Map<String, BigInteger> finalState = interpreter.execute(ifStatement);
+
+        assertEquals(Map.of("ifBranchTaken", BigInteger.ONE), finalState);
+    }
+
+    @Test
+    void shouldOnlyExecuteElseBranchWhenConditionIsFalse() {
+        Command ifStatement = new If(Bool.FALSE,
+                new Assign("ifBranchTaken", new Const(BigInteger.ONE)),
+                new Assign("elseBranchTaken", new Const(BigInteger.ONE)));
+
+        Interpreter interpreter = new Interpreter();
+        Map<String, BigInteger> finalState = interpreter.execute(ifStatement);
+
+        assertEquals(Map.of("elseBranchTaken", BigInteger.ONE), finalState);
+    }
+
+    private void assumeThatAssignCommandIsImplemented() {
+        Command assignment = new Assign("result", new Const(BigInteger.ONE));
+
+        Interpreter interpreter = new Interpreter();
+        Map<String, BigInteger> finalState = interpreter.execute(assignment);
+
+        assumeTrue(Map.of("result", BigInteger.ONE).equals(finalState));
     }
 
 }
