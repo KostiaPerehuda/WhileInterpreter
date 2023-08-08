@@ -146,7 +146,10 @@ class InterpreterTest {
                 Arguments.of(new And(Bool.FALSE, Bool.TRUE), false),
                 Arguments.of(new And(Bool.FALSE, Bool.FALSE), false),
                 Arguments.of(new Equals(new Const(BigInteger.ONE), new Const(BigInteger.ONE)), true),
-                Arguments.of(new Equals(new Const(BigInteger.ONE), new Const(BigInteger.TWO)), false)
+                Arguments.of(new Equals(new Const(BigInteger.ONE), new Const(BigInteger.TWO)), false),
+                Arguments.of(new LessThanOrEqual(new Const(BigInteger.ONE), new Const(BigInteger.TWO)), true),
+                Arguments.of(new LessThanOrEqual(new Const(BigInteger.ONE), new Const(BigInteger.ONE)), true),
+                Arguments.of(new LessThanOrEqual(new Const(BigInteger.TWO), new Const(BigInteger.ONE)), false)
         );
     }
 

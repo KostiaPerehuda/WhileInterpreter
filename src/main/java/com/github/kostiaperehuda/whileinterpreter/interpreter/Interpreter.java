@@ -55,7 +55,10 @@ public class Interpreter {
             return evaluate(and.left()) && evaluate(and.right());
         }
         if (expression instanceof Equals equals) {
-            return evaluate(equals.left()).equals(evaluate(equals.right()));
+            return evaluate(equals.left()).compareTo(evaluate(equals.right())) == 0;
+        }
+        if (expression instanceof LessThanOrEqual lessThanOrEqual) {
+            return evaluate(lessThanOrEqual.left()).compareTo(evaluate(lessThanOrEqual.right())) <= 0;
         }
         throw new IllegalArgumentException(expression.toString());
     }
