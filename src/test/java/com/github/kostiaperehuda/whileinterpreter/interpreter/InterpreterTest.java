@@ -1,10 +1,7 @@
 package com.github.kostiaperehuda.whileinterpreter.interpreter;
 
 import com.github.kostiaperehuda.whileinterpreter.ast.aexp.*;
-import com.github.kostiaperehuda.whileinterpreter.ast.bexp.And;
-import com.github.kostiaperehuda.whileinterpreter.ast.bexp.Bool;
-import com.github.kostiaperehuda.whileinterpreter.ast.bexp.BooleanExpression;
-import com.github.kostiaperehuda.whileinterpreter.ast.bexp.Not;
+import com.github.kostiaperehuda.whileinterpreter.ast.bexp.*;
 import com.github.kostiaperehuda.whileinterpreter.ast.cmd.*;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -147,7 +144,9 @@ class InterpreterTest {
                 Arguments.of(new And(Bool.TRUE, Bool.TRUE), true),
                 Arguments.of(new And(Bool.TRUE, Bool.FALSE), false),
                 Arguments.of(new And(Bool.FALSE, Bool.TRUE), false),
-                Arguments.of(new And(Bool.FALSE, Bool.FALSE), false)
+                Arguments.of(new And(Bool.FALSE, Bool.FALSE), false),
+                Arguments.of(new Equals(new Const(BigInteger.ONE), new Const(BigInteger.ONE)), true),
+                Arguments.of(new Equals(new Const(BigInteger.ONE), new Const(BigInteger.TWO)), false)
         );
     }
 
