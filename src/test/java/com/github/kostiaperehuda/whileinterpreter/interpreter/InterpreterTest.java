@@ -14,8 +14,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.Stream;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.*;
 
 class InterpreterTest {
 
@@ -151,6 +150,33 @@ class InterpreterTest {
                 Arguments.of(new LessThanOrEqual(new Const(BigInteger.ONE), new Const(BigInteger.ONE)), true),
                 Arguments.of(new LessThanOrEqual(new Const(BigInteger.TWO), new Const(BigInteger.ONE)), false)
         );
+    }
+
+    @Test
+    void shouldNeverEnterWhileLoopBodyWhenLoopConditionIsInitiallyFalse() {
+        Command whileCommand = new While(Bool.FALSE,
+                new Assign("variable", new Const(BigInteger.ONE)));
+
+        Interpreter interpreter = new Interpreter();
+        Map<String, BigInteger> finalState = interpreter.execute(whileCommand);
+
+        assertTrue(finalState.isEmpty());
+    }
+
+    @Test
+    void shouldContinueToEnterWhileLoopBodyUntilLoopConditionBecomesFalseWhenLoopConditionIsInitiallyTrue() {
+        Command whileCommand = new While(
+                new LessThanOrEqual(new Variable("counter"), new Const(BigInteger.ONE)),
+                new Assign("counter", new Plus(new Variable("counter"), new Const(BigInteger.ONE)))
+        );
+
+        Map<String, BigInteger> initialState = new HashMap<>();
+        initialState.put("counter", BigInteger.ZERO);
+
+        Interpreter interpreter = new Interpreter(initialState);
+        Map<String, BigInteger> finalState = interpreter.execute(whileCommand);
+
+        assertEquals(Map.of("counter", BigInteger.TWO), finalState);
     }
 
 }

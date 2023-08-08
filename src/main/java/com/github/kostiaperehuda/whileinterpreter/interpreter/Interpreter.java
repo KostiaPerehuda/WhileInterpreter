@@ -38,6 +38,12 @@ public class Interpreter {
             execute(evaluate(ifStatement.condition()) ? ifStatement.ifBranch() : ifStatement.elseBranch());
             return state;
         }
+        if (command instanceof While whileStatement) {
+            while (evaluate(whileStatement.condition())) {
+                execute(whileStatement.body());
+            }
+            return state;
+        }
         throw new IllegalArgumentException(state.toString());
     }
 
