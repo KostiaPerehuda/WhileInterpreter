@@ -2,6 +2,8 @@ package com.github.kostiaperehuda.whileinterpreter.interpreter;
 
 import com.github.kostiaperehuda.whileinterpreter.ast.aexp.*;
 import com.github.kostiaperehuda.whileinterpreter.ast.bexp.Bool;
+import com.github.kostiaperehuda.whileinterpreter.ast.bexp.BooleanExpression;
+import com.github.kostiaperehuda.whileinterpreter.ast.bexp.Not;
 import com.github.kostiaperehuda.whileinterpreter.ast.cmd.*;
 
 import java.math.BigInteger;
@@ -35,17 +37,23 @@ public class Interpreter {
             return state;
         }
         if (command instanceof If ifStatement) {
-            var condition = ifStatement.condition();
-
-            if (condition instanceof Bool bool) {
-                switch (bool) {
-                    case TRUE -> execute(ifStatement.ifBranch());
-                    case FALSE -> execute(ifStatement.elseBranch());
-                }
-            }
+            execute(evaluate(ifStatement.condition()) ? ifStatement.ifBranch() : ifStatement.elseBranch());
             return state;
         }
         throw new IllegalArgumentException(state.toString());
+    }
+
+    private boolean evaluate(BooleanExpression expression) {
+        if (expression instanceof Bool bool) {
+            return switch (bool) {
+                case TRUE -> true;
+                case FALSE -> false;
+            };
+        }
+        if (expression instanceof Not not) {
+            return !evaluate(not.operand());
+        }
+        throw new IllegalArgumentException(expression.toString());
     }
 
     private BigInteger evaluate(ArithmeticExpression expression) {

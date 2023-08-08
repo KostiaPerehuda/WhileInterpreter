@@ -2,6 +2,8 @@ package com.github.kostiaperehuda.whileinterpreter.interpreter;
 
 import com.github.kostiaperehuda.whileinterpreter.ast.aexp.*;
 import com.github.kostiaperehuda.whileinterpreter.ast.bexp.Bool;
+import com.github.kostiaperehuda.whileinterpreter.ast.bexp.BooleanExpression;
+import com.github.kostiaperehuda.whileinterpreter.ast.bexp.Not;
 import com.github.kostiaperehuda.whileinterpreter.ast.cmd.*;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -122,13 +124,27 @@ class InterpreterTest {
         assertEquals(Map.of("elseBranchTaken", BigInteger.ONE), finalState);
     }
 
-    private void assumeThatAssignCommandIsImplemented() {
-        Command assignment = new Assign("result", new Const(BigInteger.ONE));
+    @ParameterizedTest
+    @MethodSource("compoundBooleanExpressionsWithExpectedResults")
+    void shouldCorrectlyEvaluateCompoundBooleanExpressionWhenExecutingIfCommand(
+            BooleanExpression expression, boolean expectedResult
+    ) {
+        Command ifStatement = new If(expression,
+                new Assign("result", new Const(BigInteger.ONE)),
+                new Assign("result", new Const(BigInteger.ZERO)));
 
         Interpreter interpreter = new Interpreter();
-        Map<String, BigInteger> finalState = interpreter.execute(assignment);
+        Map<String, BigInteger> finalState = interpreter.execute(ifStatement);
 
-        assumeTrue(Map.of("result", BigInteger.ONE).equals(finalState));
+        BigInteger expectedResultValue = expectedResult ? BigInteger.ONE : BigInteger.ZERO;
+        assertEquals(Map.of("result", expectedResultValue), finalState);
+    }
+
+    static Stream<Arguments> compoundBooleanExpressionsWithExpectedResults() {
+        return Stream.of(
+                Arguments.of(new Not(Bool.TRUE), false),
+                Arguments.of(new Not(Bool.FALSE), true)
+        );
     }
 
 }
