@@ -1,0 +1,16 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="WhileInterpreterCLI" type="Application" factoryName="Application" nameIsGenerated="true">
+    <option name="MAIN_CLASS_NAME" value="com.github.kostiaperehuda.whileinterpreter.cli.WhileInterpreterCLI" />
+    <module name="while-interpreter-cli" />
+    <option name="PROGRAM_PARAMETERS" value="program.while" />
+    <extension name="coverage">
+      <pattern>
+        <option name="PATTERN" value="com.github.kostiaperehuda.whileinterpreter.cli.*" />
+        <option name="ENABLED" value="true" />
+      </pattern>
+    </extension>
+    <method v="2">
+      <option name="Make" enabled="true" />
+    </method>
+  </configuration>
+</component>
