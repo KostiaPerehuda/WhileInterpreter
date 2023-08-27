@@ -1,4 +1,4 @@
-package com.github.kostiaperehuda.whileinterpreter.ast.aexp;
+package com.github.kostiaperehuda.whileinterpreter.ast;
 
 import java.util.Objects;
 

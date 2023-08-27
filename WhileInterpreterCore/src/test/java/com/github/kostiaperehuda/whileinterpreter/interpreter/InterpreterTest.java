@@ -1,8 +1,6 @@
 package com.github.kostiaperehuda.whileinterpreter.interpreter;
 
-import com.github.kostiaperehuda.whileinterpreter.ast.aexp.*;
-import com.github.kostiaperehuda.whileinterpreter.ast.bexp.*;
-import com.github.kostiaperehuda.whileinterpreter.ast.cmd.*;
+import com.github.kostiaperehuda.whileinterpreter.ast.*;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
@@ -34,7 +32,7 @@ class InterpreterTest {
     void shouldPutTheResultOfArithmeticExpressionIntoTheProgramStateWhenExecutingAssignCommand(
             ArithmeticExpression expression, BigInteger expectedResult
     ) {
-        Command assignment = new Assign("result", expression);
+        Command assignment = new Assign(new Variable("result"), expression);
 
         Interpreter interpreter = new Interpreter();
         Map<String, BigInteger> finalState = interpreter.execute(assignment);
@@ -53,7 +51,7 @@ class InterpreterTest {
 
     @Test
     void shouldExtractTheValueFromTheVariableByQueryingTheProgramState() {
-        Command assignment = new Assign("result", new Variable("variable"));
+        Command assignment = new Assign(new Variable("result"), new Variable("variable"));
 
         Map<String, BigInteger> initialState = new HashMap<>();
         initialState.put("variable", BigInteger.TWO);
@@ -66,7 +64,7 @@ class InterpreterTest {
 
     @Test
     void shouldThrowExceptionWhenExtractingUndefinedVariableFromTheProgramState() {
-        Command assignment = new Assign("result", new Variable("variable"));
+        Command assignment = new Assign(new Variable("result"), new Variable("variable"));
 
         Interpreter interpreter = new Interpreter();
         assertThrows(UndefinedVariableException.class, () -> interpreter.execute(assignment));
@@ -75,8 +73,8 @@ class InterpreterTest {
     @Test
     void shouldExecuteBothChildCommandsOfSequenceCommand() {
         Command sequence = new Sequence(
-                new Assign("one", new Const(BigInteger.ONE)),
-                new Assign("two", new Const(BigInteger.TWO)));
+                new Assign(new Variable("one"), new Const(BigInteger.ONE)),
+                new Assign(new Variable("two"), new Const(BigInteger.TWO)));
 
         Interpreter interpreter = new Interpreter();
         Map<String, BigInteger> finalState = interpreter.execute(sequence);
@@ -87,8 +85,8 @@ class InterpreterTest {
     @Test
     void shouldExecuteChildCommandsOfSequenceCommandInOrder() {
         Command sequence = new Sequence(
-                new Assign("one", new Const(BigInteger.ONE)),
-                new Assign("one", new Const(BigInteger.TWO)));
+                new Assign(new Variable("one"), new Const(BigInteger.ONE)),
+                new Assign(new Variable("one"), new Const(BigInteger.TWO)));
 
         Interpreter interpreter = new Interpreter();
         Map<String, BigInteger> finalState = interpreter.execute(sequence);
@@ -99,8 +97,8 @@ class InterpreterTest {
     @Test
     void shouldOnlyExecuteIfBranchWhenConditionIsTrue() {
         Command ifStatement = new If(Bool.TRUE,
-                new Assign("ifBranchTaken", new Const(BigInteger.ONE)),
-                new Assign("elseBranchTaken", new Const(BigInteger.ONE)));
+                new Assign(new Variable("ifBranchTaken"), new Const(BigInteger.ONE)),
+                new Assign(new Variable("elseBranchTaken"), new Const(BigInteger.ONE)));
 
         Interpreter interpreter = new Interpreter();
         Map<String, BigInteger> finalState = interpreter.execute(ifStatement);
@@ -111,8 +109,8 @@ class InterpreterTest {
     @Test
     void shouldOnlyExecuteElseBranchWhenConditionIsFalse() {
         Command ifStatement = new If(Bool.FALSE,
-                new Assign("ifBranchTaken", new Const(BigInteger.ONE)),
-                new Assign("elseBranchTaken", new Const(BigInteger.ONE)));
+                new Assign(new Variable("ifBranchTaken"), new Const(BigInteger.ONE)),
+                new Assign(new Variable("elseBranchTaken"), new Const(BigInteger.ONE)));
 
         Interpreter interpreter = new Interpreter();
         Map<String, BigInteger> finalState = interpreter.execute(ifStatement);
@@ -126,8 +124,8 @@ class InterpreterTest {
             BooleanExpression expression, boolean expectedResult
     ) {
         Command ifStatement = new If(expression,
-                new Assign("result", new Const(BigInteger.ONE)),
-                new Assign("result", new Const(BigInteger.ZERO)));
+                new Assign(new Variable("result"), new Const(BigInteger.ONE)),
+                new Assign(new Variable("result"), new Const(BigInteger.ZERO)));
 
         Interpreter interpreter = new Interpreter();
         Map<String, BigInteger> finalState = interpreter.execute(ifStatement);
@@ -155,7 +153,7 @@ class InterpreterTest {
     @Test
     void shouldNeverEnterWhileLoopBodyWhenLoopConditionIsInitiallyFalse() {
         Command whileCommand = new While(Bool.FALSE,
-                new Assign("variable", new Const(BigInteger.ONE)));
+                new Assign(new Variable("variable"), new Const(BigInteger.ONE)));
 
         Interpreter interpreter = new Interpreter();
         Map<String, BigInteger> finalState = interpreter.execute(whileCommand);
@@ -167,7 +165,7 @@ class InterpreterTest {
     void shouldContinueToEnterWhileLoopBodyUntilLoopConditionBecomesFalseWhenLoopConditionIsInitiallyTrue() {
         Command whileCommand = new While(
                 new LessThanOrEqual(new Variable("counter"), new Const(BigInteger.ONE)),
-                new Assign("counter", new Plus(new Variable("counter"), new Const(BigInteger.ONE)))
+                new Assign(new Variable("counter"), new Plus(new Variable("counter"), new Const(BigInteger.ONE)))
         );
 
         Map<String, BigInteger> initialState = new HashMap<>();

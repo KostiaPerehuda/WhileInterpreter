@@ -1,6 +1,4 @@
-package com.github.kostiaperehuda.whileinterpreter.ast.cmd;
-
-import com.github.kostiaperehuda.whileinterpreter.ast.bexp.BooleanExpression;
+package com.github.kostiaperehuda.whileinterpreter.ast;
 
 import java.util.Objects;
 

@@ -1,8 +1,6 @@
 package com.github.kostiaperehuda.whileinterpreter.interpreter;
 
-import com.github.kostiaperehuda.whileinterpreter.ast.aexp.*;
-import com.github.kostiaperehuda.whileinterpreter.ast.bexp.*;
-import com.github.kostiaperehuda.whileinterpreter.ast.cmd.*;
+import com.github.kostiaperehuda.whileinterpreter.ast.*;
 
 import java.math.BigInteger;
 import java.util.HashMap;
@@ -26,7 +24,7 @@ public class Interpreter {
             return state;
         }
         if (command instanceof Assign assign) {
-            state.put(assign.variableName(), evaluate(assign.expression()));
+            state.put(assign.variable().name(), evaluate(assign.expression()));
             return state;
         }
         if (command instanceof Sequence sequence) {

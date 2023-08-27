@@ -1,6 +1,4 @@
-package com.github.kostiaperehuda.whileinterpreter.ast.bexp;
-
-import com.github.kostiaperehuda.whileinterpreter.ast.aexp.ArithmeticExpression;
+package com.github.kostiaperehuda.whileinterpreter.ast;
 
 import java.util.Objects;
 

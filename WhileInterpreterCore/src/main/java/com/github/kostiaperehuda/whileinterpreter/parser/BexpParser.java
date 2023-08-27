@@ -1,8 +1,6 @@
 package com.github.kostiaperehuda.whileinterpreter.parser;
 
-import com.github.kostiaperehuda.whileinterpreter.ast.aexp.ArithmeticExpression;
-import com.github.kostiaperehuda.whileinterpreter.ast.bexp.*;
-import com.github.kostiaperehuda.whileinterpreter.ast.bexp.Bool;
+import com.github.kostiaperehuda.whileinterpreter.ast.*;
 
 import java.util.Deque;
 

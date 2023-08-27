@@ -1,6 +1,6 @@
 package com.github.kostiaperehuda.whileinterpreter.parser;
 
-import com.github.kostiaperehuda.whileinterpreter.ast.cmd.Command;
+import com.github.kostiaperehuda.whileinterpreter.ast.Command;
 
 import java.io.IOException;
 import java.nio.file.Files;

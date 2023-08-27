@@ -1,6 +1,6 @@
 package com.github.kostiaperehuda.whileinterpreter.parser;
 
-import com.github.kostiaperehuda.whileinterpreter.ast.aexp.*;
+import com.github.kostiaperehuda.whileinterpreter.ast.*;
 
 import java.math.BigInteger;
 import java.util.Deque;

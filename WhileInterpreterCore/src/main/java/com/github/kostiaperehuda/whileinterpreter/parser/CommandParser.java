@@ -1,7 +1,6 @@
 package com.github.kostiaperehuda.whileinterpreter.parser;
 
-import com.github.kostiaperehuda.whileinterpreter.ast.bexp.BooleanExpression;
-import com.github.kostiaperehuda.whileinterpreter.ast.cmd.*;
+import com.github.kostiaperehuda.whileinterpreter.ast.*;
 
 import java.util.Deque;
 
@@ -106,7 +105,7 @@ public class CommandParser {
             throw new RuntimeException("Syntax error at token " + t + "! < CONTROL_SYMBOL = > expected!");
         }
 
-        return new Assign(varName, AexpParser.parse(tokens));
+        return new Assign(new Variable(varName), AexpParser.parse(tokens));
     }
 
     private static Command parseIf(Deque<Token> tokens) {

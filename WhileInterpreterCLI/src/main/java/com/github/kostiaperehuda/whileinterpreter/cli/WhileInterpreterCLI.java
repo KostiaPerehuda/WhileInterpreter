@@ -1,6 +1,6 @@
 package com.github.kostiaperehuda.whileinterpreter.cli;
 
-import com.github.kostiaperehuda.whileinterpreter.ast.cmd.Command;
+import com.github.kostiaperehuda.whileinterpreter.ast.Command;
 import com.github.kostiaperehuda.whileinterpreter.interpreter.Interpreter;
 import com.github.kostiaperehuda.whileinterpreter.parser.ProgramParser;
 
