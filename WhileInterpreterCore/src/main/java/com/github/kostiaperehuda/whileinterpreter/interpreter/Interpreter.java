@@ -5,7 +5,6 @@ import com.github.kostiaperehuda.whileinterpreter.ast.*;
 import java.math.BigInteger;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Optional;
 
 public class Interpreter {
 
@@ -20,71 +19,52 @@ public class Interpreter {
     }
 
     public Map<String, BigInteger> execute(Command command) {
-        if (command instanceof Skip) {
-            return state;
-        }
-        if (command instanceof Assign assign) {
-            state.put(assign.variable().name(), evaluate(assign.expression()));
-            return state;
-        }
-        if (command instanceof Sequence sequence) {
-            execute(sequence.first());
-            execute(sequence.second());
-            return state;
-        }
-        if (command instanceof If ifStatement) {
-            execute(evaluate(ifStatement.condition()) ? ifStatement.ifBranch() : ifStatement.elseBranch());
-            return state;
-        }
-        if (command instanceof While whileStatement) {
-            while (evaluate(whileStatement.condition())) {
-                execute(whileStatement.body());
+        switch (command) {
+            case Skip ignored -> {
             }
-            return state;
+            case Assign(var variable, var expression) -> {
+                state.put(variable.name(), evaluate(expression));
+            }
+            case Sequence(var first, var second) -> {
+                execute(first);
+                execute(second);
+            }
+            case If(var condition, var ifBranch, var elseBranch) -> {
+                execute(evaluate(condition) ? ifBranch : elseBranch);
+            }
+            case While(var condition, var body) -> {
+                while (evaluate(condition)) {
+                    execute(body);
+                }
+            }
         }
-        throw new IllegalArgumentException(state.toString());
+        return state;
     }
 
     private boolean evaluate(BooleanExpression expression) {
-        if (expression instanceof Bool bool) {
-            return switch (bool) {
+        return switch (expression) {
+            case Bool bool -> switch (bool) {
                 case TRUE -> true;
                 case FALSE -> false;
             };
-        }
-        if (expression instanceof Not not) {
-            return !evaluate(not.operand());
-        }
-        if (expression instanceof And and) {
-            return evaluate(and.left()) && evaluate(and.right());
-        }
-        if (expression instanceof Equals equals) {
-            return evaluate(equals.left()).compareTo(evaluate(equals.right())) == 0;
-        }
-        if (expression instanceof LessThanOrEqual lessThanOrEqual) {
-            return evaluate(lessThanOrEqual.left()).compareTo(evaluate(lessThanOrEqual.right())) <= 0;
-        }
-        throw new IllegalArgumentException(expression.toString());
+            case Not(var operand) -> !evaluate(operand);
+            case And(var left, var right) -> evaluate(left) && evaluate(right);
+            case Equals(var left, var right) -> evaluate(left).compareTo(evaluate(right)) == 0;
+            case LessThanOrEqual(var left, var right) -> evaluate(left).compareTo(evaluate(right)) <= 0;
+        };
     }
 
     private BigInteger evaluate(ArithmeticExpression expression) {
-        if (expression instanceof Const constant) {
-            return constant.number();
-        }
-        if (expression instanceof Variable variable) {
-            return Optional.ofNullable(state.get(variable.name()))
-                    .orElseThrow(() -> new UndefinedVariableException(variable.name()));
-        }
-        if (expression instanceof Plus plus) {
-            return evaluate(plus.left()).add(evaluate(plus.right()));
-        }
-        if (expression instanceof Minus minus) {
-            return evaluate(minus.left()).subtract(evaluate(minus.right()));
-        }
-        if (expression instanceof Multiply multiply) {
-            return evaluate(multiply.left()).multiply(evaluate(multiply.right()));
-        }
-        throw new IllegalArgumentException(expression.toString());
+        return switch (expression) {
+            case Const(var number) -> number;
+            case Plus(var left, var right) -> evaluate(left).add(evaluate(right));
+            case Minus(var left, var right) -> evaluate(left).subtract(evaluate(right));
+            case Multiply(var left, var right) -> evaluate(left).multiply(evaluate(right));
+            case Variable(var name) -> {
+                if (state.containsKey(name)) yield state.get(name);
+                throw new UndefinedVariableException(name);
+            }
+        };
     }
 
 }
