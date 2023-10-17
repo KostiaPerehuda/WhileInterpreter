@@ -5,6 +5,7 @@ import com.github.kostiaperehuda.whileinterpreter.interpreter.Interpreter;
 import com.github.kostiaperehuda.whileinterpreter.parser.ProgramParser;
 
 import java.io.IOException;
+import java.nio.file.Paths;
 
 public class WhileInterpreterCLI {
 
@@ -14,7 +15,7 @@ public class WhileInterpreterCLI {
             return;
         }
 
-        Command program = ProgramParser.parseFile(args[0]);
+        Command program = ProgramParser.parseFile(Paths.get(args[0]));
 
         Interpreter interpreter = new Interpreter();
         var executionResult = interpreter.execute(program);
