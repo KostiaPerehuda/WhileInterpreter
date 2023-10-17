@@ -5,5 +5,5 @@ module com.github.kostiaperehuda.whileinterpreter.gui {
     requires javafx.fxml;
 
     exports com.github.kostiaperehuda.whileinterpreter.gui to javafx.graphics;
-    opens com.github.kostiaperehuda.whileinterpreter.gui to javafx.fxml;
+    opens com.github.kostiaperehuda.whileinterpreter.gui.controllers to javafx.fxml;
 }

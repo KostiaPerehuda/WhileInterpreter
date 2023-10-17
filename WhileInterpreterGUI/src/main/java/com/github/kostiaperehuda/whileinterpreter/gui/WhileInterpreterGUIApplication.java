@@ -13,18 +13,26 @@ public class WhileInterpreterGUIApplication extends Application {
     private static Scene scene;
 
     @Override
+    public void init() {
+    }
+
+    @Override
+    public void stop() {
+    }
+
+    @Override
     public void start(Stage stage) throws IOException {
-        scene = new Scene(loadFXML("primary"), 640, 480);
+        scene = new Scene(loadFXML("Main"), 960, 720);
         stage.setScene(scene);
         stage.show();
     }
 
-    static void setRoot(String fxml) throws IOException {
+    public static void setRoot(String fxml) throws IOException {
         scene.setRoot(loadFXML(fxml));
     }
 
     private static Parent loadFXML(String fxml) throws IOException {
-        FXMLLoader fxmlLoader = new FXMLLoader(WhileInterpreterGUI.class.getResource(fxml + ".fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader(WhileInterpreterGUI.class.getResource("/views/" + fxml + ".fxml"));
         return fxmlLoader.load();
     }
 
