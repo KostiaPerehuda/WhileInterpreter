@@ -21,6 +21,7 @@
             <MenuBar>
                 <Menu text="File">
                     <MenuItem onAction="#onMenuFileRun" text="Run" />
+                    <MenuItem onAction="#onMenuFileOpen" text="Open" />
                     <MenuItem onAction="#onMenuFileClose" text="Close" />
                 </Menu>
                 <Menu text="Help">
@@ -28,7 +29,7 @@
                 </Menu>
             </MenuBar>
             <ToolBar>
-                <Button text="Button" />
+                <Button text="Button" onAction="#onToolbarRun" />
             </ToolBar>
         </VBox>
     </top>

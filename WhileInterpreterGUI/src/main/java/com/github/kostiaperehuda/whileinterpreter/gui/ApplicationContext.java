@@ -2,27 +2,28 @@ package com.github.kostiaperehuda.whileinterpreter.gui;
 
 public class ApplicationContext {
 
-    private ViewModel viewModel;
-
-    public ApplicationContext() {
-        this.viewModel = new ViewModel();
-    }
+    private final ViewModel viewModel;
 
     public ApplicationContext(ViewModel viewModel) {
         this.viewModel = viewModel;
     }
 
-    public ViewModel getViewModel() {
-        return viewModel;
-    }
-
     public <T> T getNewInstanceOf(Class<T> type) {
         T newInstance;
 
+        if ((newInstance = injectViewModelIntoNewInstanceOf(type)) != null) return newInstance;
         if ((newInstance = injectContextIntoNewInstanceOf(type)) != null) return newInstance;
         if ((newInstance = createNewInstanceOf(type)) != null) return newInstance;
 
         throw new ObjectCreationException(type);
+    }
+
+    private <T> T injectViewModelIntoNewInstanceOf(Class<T> type) {
+        try {
+            return type.getDeclaredConstructor(viewModel.getClass()).newInstance(viewModel);
+        } catch (ReflectiveOperationException e) {
+            return null;
+        }
     }
 
     private <T> T injectContextIntoNewInstanceOf(Class<T> type) {
@@ -32,6 +33,7 @@ public class ApplicationContext {
             return null;
         }
     }
+
 
     private <T> T createNewInstanceOf(Class<T> type) {
         try {
