@@ -8,6 +8,10 @@ public class ApplicationContext {
         this.viewModel = viewModel;
     }
 
+    public ViewModel getViewModel() {
+        return viewModel;
+    }
+
     public <T> T getNewInstanceOf(Class<T> type) {
         T newInstance;
 

@@ -25,17 +25,18 @@ public class ExecuteFileAction implements Runnable {
 
     @Override
     public void run() {
+        Optional<Path> filepath = pathProvider.getPath();
+        if (filepath.isEmpty()) return;
         try {
-            Optional<Path> filepath = pathProvider.getPath();
-            if (filepath.isEmpty()) return;
-
             Command program = ProgramParser.parseFile(filepath.get());
             Interpreter interpreter = new Interpreter();
             Map<String, BigInteger> result = interpreter.execute(program);
 
             view.editor().tabs().add(new Editor.Tab(result.toString()));
+            view.statusBar().statusProperty().set("Executed " + filepath.get());
         } catch (IOException e) {
             e.printStackTrace();
+            view.statusBar().statusProperty().set("Failed to execute " + filepath.get() + " due to " + e.getMessage());
         }
     }
 

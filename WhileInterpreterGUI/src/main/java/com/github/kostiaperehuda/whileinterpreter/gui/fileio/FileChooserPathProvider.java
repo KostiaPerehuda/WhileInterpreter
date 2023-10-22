@@ -31,6 +31,7 @@ public class FileChooserPathProvider implements PathProvider {
     public static FileChooserPathProvider ofWhilePrograms(Window window) {
         FileChooserPathProvider provider = new FileChooserPathProvider(window);
         provider.fileChooser.getExtensionFilters().add(new ExtensionFilter("While Programs", "*.while"));
+        provider.fileChooser.setInitialDirectory(new File("."));
         return provider;
     }
 

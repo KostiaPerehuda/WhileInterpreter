@@ -1,41 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.control.Menu?>
-<?import javafx.scene.control.MenuBar?>
-<?import javafx.scene.control.MenuItem?>
-<?import javafx.scene.control.SplitPane?>
-<?import javafx.scene.control.TableColumn?>
-<?import javafx.scene.control.TableView?>
-<?import javafx.scene.control.TextArea?>
-<?import javafx.scene.control.ToolBar?>
-<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.control.cell.PropertyValueFactory?>
+<?import javafx.scene.control.*?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.VBox?>
-
-<?import javafx.scene.control.cell.PropertyValueFactory?>
-<BorderPane xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.github.kostiaperehuda.whileinterpreter.gui.controllers.MainController">
+<BorderPane xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml" fx:id="root"
+            fx:controller="com.github.kostiaperehuda.whileinterpreter.gui.controllers.MainController">
     <top>
-        <VBox BorderPane.alignment="CENTER">
-            <MenuBar>
-                <Menu text="File">
-                    <MenuItem onAction="#onMenuFileRun" text="Run" />
-                    <MenuItem onAction="#onMenuFileOpen" text="Open" />
-                    <MenuItem onAction="#onMenuFileClose" text="Close" />
-                </Menu>
-                <Menu text="Help">
-                    <MenuItem text="About" />
-                </Menu>
-            </MenuBar>
-            <ToolBar>
-                <Button text="Button" onAction="#onToolbarRun" />
-            </ToolBar>
+        <VBox>
+            <fx:include source="MenuBar.fxml"/>
+            <fx:include source="ToolBar.fxml"/>
         </VBox>
     </top>
     <center>
-        <SplitPane dividerPositions="0.6" BorderPane.alignment="CENTER">
-            <TextArea fx:id="mainTextArea" editable="false" text="Hello" />
+        <SplitPane dividerPositions="0.6">
+            <TextArea fx:id="mainTextArea" editable="false" text="Hello"/>
             <TableView fx:id="stateView">
                 <columns>
                     <TableColumn text="Name">
@@ -53,8 +32,6 @@
         </SplitPane>
     </center>
     <bottom>
-        <AnchorPane BorderPane.alignment="CENTER">
-            <Label text="Status Label" />
-        </AnchorPane>
+        <fx:include source="StatusBar.fxml"/>
     </bottom>
 </BorderPane>

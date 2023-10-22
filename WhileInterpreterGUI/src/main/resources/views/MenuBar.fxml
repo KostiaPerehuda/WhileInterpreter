@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<MenuBar xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml" fx:id="root"
+         fx:controller="com.github.kostiaperehuda.whileinterpreter.gui.controllers.MenuBarController">
+    <Menu text="File">
+        <MenuItem onAction="#onFileRun" text="Run"/>
+        <MenuItem onAction="#onFileOpen" text="Open"/>
+        <MenuItem onAction="#onFileClose" text="Close"/>
+    </Menu>
+    <Menu text="Help">
+        <MenuItem text="About"/>
+    </Menu>
+</MenuBar>

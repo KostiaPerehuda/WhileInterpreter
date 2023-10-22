@@ -22,19 +22,26 @@ public class ExecuteProgramAction implements Runnable {
 
     @Override
     public void run() {
-        Optional<String> programOptional = Optional.ofNullable(view)
-                .map(ViewModel::editor)
-                .map(Editor::activeTab)
-                .map(ObjectProperty::get)
-                .map(Editor.Tab::text)
-                .map(StringProperty::get);
+        try {
+            Optional<String> programOptional = Optional.of(view)
+                    .map(ViewModel::editor)
+                    .map(Editor::activeTabProperty)
+                    .map(ObjectProperty::get)
+                    .map(Editor.Tab::textProperty)
+                    .map(StringProperty::get);
 
-        programOptional.ifPresent(program -> {
-            Command command = ProgramParser.parseString(program);
-            Interpreter interpreter = new Interpreter();
-            Map<String, BigInteger> result = interpreter.execute(command);
-            view.editor().tabs().add(new Editor.Tab(result.toString()));
-        });
+            programOptional.ifPresent(program -> {
+                Command command = ProgramParser.parseString(program);
+                Interpreter interpreter = new Interpreter();
+                Map<String, BigInteger> result = interpreter.execute(command);
+                view.editor().tabs().add(new Editor.Tab(result.toString()));
+                view.statusBar().statusProperty().set("Executed current program");
+            });
+
+        } catch (RuntimeException e) {
+            e.printStackTrace();
+            view.statusBar().statusProperty().set("Failed to execute current program due to " + e.getMessage());
+        }
     }
 
 }

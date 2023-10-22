@@ -1,19 +1,15 @@
 package com.github.kostiaperehuda.whileinterpreter.gui.controllers;
 
 import com.github.kostiaperehuda.whileinterpreter.gui.ViewModel;
-import javafx.beans.binding.Bindings;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
-import javafx.scene.control.TableView;
-import javafx.scene.control.TextArea;
+import javafx.scene.control.Label;
 
-import java.math.BigInteger;
 import java.net.URL;
-import java.util.Map;
 import java.util.ResourceBundle;
 
-public class MainController implements Initializable {
+public class StatusBarController implements Initializable {
 
     private final ViewModel model;
 
@@ -21,18 +17,15 @@ public class MainController implements Initializable {
     private Parent root;
 
     @FXML
-    private TableView<Map.Entry<String, BigInteger>> stateView;
+    private Label status;
 
-    @FXML
-    private TextArea mainTextArea;
-
-    public MainController(ViewModel model) {
+    public StatusBarController(ViewModel model) {
         this.model = model;
     }
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        mainTextArea.textProperty().bind(Bindings.select(model.editor().activeTabProperty(), "text"));
+        status.textProperty().bind(model.statusBar().statusProperty());
     }
 
 }

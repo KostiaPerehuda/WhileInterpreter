@@ -23,14 +23,17 @@ public class OpenFileAction implements Runnable {
 
     @Override
     public void run() {
-        try {
-            Optional<Path> filepath = pathProvider.getPath();
-            if (filepath.isEmpty()) return;
+        Optional<Path> filepath = pathProvider.getPath();
+        if (filepath.isEmpty()) return;
 
+        try {
             String program = fileSystem.readString(filepath.get());
+
             model.editor().tabs().add(new Editor.Tab(program));
+            model.statusBar().statusProperty().set("Opened " + filepath.get());
         } catch (IOException e) {
             e.printStackTrace();
+            model.statusBar().statusProperty().set("Failed to open " + filepath.get());
         }
     }
 

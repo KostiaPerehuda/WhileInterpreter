@@ -29,6 +29,8 @@ public class WhileInterpreterGUIApplication extends Application {
         scene = new Scene(loadFXML("Main"), 960, 720);
         stage.setScene(scene);
         stage.show();
+
+        context.getViewModel().statusBar().statusProperty().set("Ready");
     }
 
     public void setRoot(String fxml) throws IOException {

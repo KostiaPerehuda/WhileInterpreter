@@ -2,30 +2,45 @@ package com.github.kostiaperehuda.whileinterpreter.gui.viewmodels;
 
 import javafx.beans.property.*;
 import javafx.collections.FXCollections;
+import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 
 
-public record Editor(
-        ObservableList<Tab> tabs,
-        ObjectProperty<Tab> activeTab
-) {
+public class Editor {
+
+    private final ObservableList<Tab> tabs = FXCollections.observableArrayList();
+    private final ObjectProperty<Tab> activeTab = new SimpleObjectProperty<>();
 
     public Editor() {
-        this(
-                FXCollections.observableArrayList(),
-                new SimpleObjectProperty<>()
-        );
+        this.tabs.addListener((ListChangeListener<Tab>) change -> {
+            while (change.next()) {
+                for (Tab tab : change.getAddedSubList()) {
+                    activeTab.set(tab);
+                }
+            }
+        });
     }
 
+    public ObservableList<Tab> tabs() {
+        return tabs;
+    }
 
-    public record Tab(StringProperty text) {
+    public ObjectProperty<Tab> activeTabProperty() {
+        return activeTab;
+    }
 
-        public Tab() {
-            this(new SimpleStringProperty(""));
-        }
+    public static class Tab {
+
+        private final StringProperty text = new SimpleStringProperty("");
 
         public Tab(String text) {
-            this(new SimpleStringProperty(text));
+            this.text.set(text);
         }
+
+        public StringProperty textProperty() {
+            return text;
+        }
+
     }
+
 }
