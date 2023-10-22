@@ -3,7 +3,6 @@ package com.github.kostiaperehuda.whileinterpreter.gui.actions;
 import com.github.kostiaperehuda.whileinterpreter.ast.Command;
 import com.github.kostiaperehuda.whileinterpreter.gui.ViewModel;
 import com.github.kostiaperehuda.whileinterpreter.gui.fileio.PathProvider;
-import com.github.kostiaperehuda.whileinterpreter.gui.viewmodels.Editor;
 import com.github.kostiaperehuda.whileinterpreter.interpreter.Interpreter;
 import com.github.kostiaperehuda.whileinterpreter.parser.ProgramParser;
 
@@ -32,7 +31,7 @@ public class ExecuteFileAction implements Runnable {
             Interpreter interpreter = new Interpreter();
             Map<String, BigInteger> result = interpreter.execute(program);
 
-            view.editor().tabs().add(new Editor.Tab(result.toString()));
+            view.runResults().set(result);
             view.statusBar().statusProperty().set("Executed " + filepath.get());
         } catch (IOException e) {
             e.printStackTrace();

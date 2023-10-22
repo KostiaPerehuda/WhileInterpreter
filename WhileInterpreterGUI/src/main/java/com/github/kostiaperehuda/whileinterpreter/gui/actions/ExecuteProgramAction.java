@@ -34,7 +34,8 @@ public class ExecuteProgramAction implements Runnable {
                 Command command = ProgramParser.parseString(program);
                 Interpreter interpreter = new Interpreter();
                 Map<String, BigInteger> result = interpreter.execute(command);
-                view.editor().tabs().add(new Editor.Tab(result.toString()));
+
+                view.runResults().set(result);
                 view.statusBar().statusProperty().set("Executed current program");
             });
 

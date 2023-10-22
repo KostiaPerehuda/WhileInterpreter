@@ -1,32 +1,29 @@
 package com.github.kostiaperehuda.whileinterpreter.gui.controllers;
 
 import com.github.kostiaperehuda.whileinterpreter.gui.ViewModel;
-import javafx.beans.binding.Bindings;
+import com.github.kostiaperehuda.whileinterpreter.gui.viewmodels.Pair;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.Parent;
-import javafx.scene.control.TextArea;
+import javafx.scene.control.TableView;
 
+import java.math.BigInteger;
 import java.net.URL;
 import java.util.ResourceBundle;
 
-public class MainController implements Initializable {
+public class RunResultsController implements Initializable {
 
     private final ViewModel model;
 
     @FXML
-    private Parent root;
+    private TableView<Pair<String, BigInteger>> root;
 
-    @FXML
-    private TextArea mainTextArea;
-
-    public MainController(ViewModel model) {
+    public RunResultsController(ViewModel model) {
         this.model = model;
     }
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        mainTextArea.textProperty().bind(Bindings.select(model.editor().activeTabProperty(), "text"));
+        root.itemsProperty().bind(model.runResults().stateProperty());
     }
 
 }

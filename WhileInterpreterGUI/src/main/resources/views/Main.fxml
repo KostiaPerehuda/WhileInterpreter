@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.cell.PropertyValueFactory?>
-<?import javafx.scene.control.*?>
+<?import javafx.scene.control.SplitPane?>
+<?import javafx.scene.control.TextArea?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.VBox?>
 <BorderPane xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml" fx:id="root"
@@ -15,20 +15,7 @@
     <center>
         <SplitPane dividerPositions="0.6">
             <TextArea fx:id="mainTextArea" editable="false" text="Hello"/>
-            <TableView fx:id="stateView">
-                <columns>
-                    <TableColumn text="Name">
-                        <cellValueFactory>
-                            <PropertyValueFactory property="key"/>
-                        </cellValueFactory>
-                    </TableColumn>
-                    <TableColumn text="Value">
-                        <cellValueFactory>
-                            <PropertyValueFactory property="value"/>
-                        </cellValueFactory>
-                    </TableColumn>
-                </columns>
-            </TableView>
+            <fx:include source="RunResults.fxml"/>
         </SplitPane>
     </center>
     <bottom>

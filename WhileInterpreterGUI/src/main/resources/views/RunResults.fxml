@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.cell.PropertyValueFactory?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<TableView xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml" fx:id="root"
+           fx:controller="com.github.kostiaperehuda.whileinterpreter.gui.controllers.RunResultsController">
+    <columns>
+        <TableColumn text="Name">
+            <cellValueFactory>
+                <PropertyValueFactory property="key"/>
+            </cellValueFactory>
+        </TableColumn>
+        <TableColumn text="Value">
+            <cellValueFactory>
+                <PropertyValueFactory property="value"/>
+            </cellValueFactory>
+        </TableColumn>
+    </columns>
+</TableView>
