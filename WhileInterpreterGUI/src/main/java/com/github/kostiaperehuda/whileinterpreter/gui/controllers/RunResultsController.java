@@ -23,7 +23,7 @@ public class RunResultsController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        root.itemsProperty().bind(model.runResults().stateProperty());
+        root.itemsProperty().bind(model.runResults().lastRunResultProperty());
     }
 
 }

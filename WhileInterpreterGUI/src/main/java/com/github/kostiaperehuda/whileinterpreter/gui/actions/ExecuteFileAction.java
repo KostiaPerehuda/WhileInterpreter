@@ -31,7 +31,7 @@ public class ExecuteFileAction implements Runnable {
             Interpreter interpreter = new Interpreter();
             Map<String, BigInteger> result = interpreter.execute(program);
 
-            view.runResults().set(result);
+            view.runResults().add(result);
             view.statusBar().statusProperty().set("Executed " + filepath.get());
         } catch (IOException e) {
             e.printStackTrace();

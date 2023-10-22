@@ -10,15 +10,15 @@ import java.util.Map;
 
 public class RunResults {
 
-    private final ObjectProperty<ObservableList<Pair<String, BigInteger>>> state =
+    private final ObjectProperty<ObservableList<Pair<String, BigInteger>>> lastRunResult =
             new SimpleObjectProperty<>(FXCollections.observableArrayList());
 
-    public ObjectProperty<ObservableList<Pair<String, BigInteger>>> stateProperty() {
-        return state;
+    public ObjectProperty<ObservableList<Pair<String, BigInteger>>> lastRunResultProperty() {
+        return lastRunResult;
     }
 
-    public void set(Map<String, BigInteger> result) {
-        state.get().setAll(result.entrySet().stream().map(Pair::fromMapEntry).toList());
+    public void add(Map<String, BigInteger> result) {
+        lastRunResult.get().setAll(result.entrySet().stream().map(Pair::fromMapEntry).toList());
     }
 
 }
