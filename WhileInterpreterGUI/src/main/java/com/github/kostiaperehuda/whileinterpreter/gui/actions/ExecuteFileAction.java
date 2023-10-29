@@ -2,41 +2,46 @@ package com.github.kostiaperehuda.whileinterpreter.gui.actions;
 
 import com.github.kostiaperehuda.whileinterpreter.ast.Command;
 import com.github.kostiaperehuda.whileinterpreter.gui.ViewModel;
+import com.github.kostiaperehuda.whileinterpreter.gui.fileio.FileSystem;
 import com.github.kostiaperehuda.whileinterpreter.gui.fileio.PathProvider;
+import com.github.kostiaperehuda.whileinterpreter.gui.viewmodels.RunResults.RunResult;
 import com.github.kostiaperehuda.whileinterpreter.interpreter.Interpreter;
 import com.github.kostiaperehuda.whileinterpreter.parser.ProgramParser;
 
 import java.io.IOException;
 import java.math.BigInteger;
-import java.nio.file.Path;
 import java.util.Map;
-import java.util.Optional;
 
 public class ExecuteFileAction implements Runnable {
 
     private final ViewModel view;
+    private final FileSystem fileSystem;
     private final PathProvider pathProvider;
 
-    public ExecuteFileAction(ViewModel view, PathProvider pathProvider) {
+    public ExecuteFileAction(ViewModel view, FileSystem fileSystem, PathProvider pathProvider) {
         this.view = view;
+        this.fileSystem = fileSystem;
         this.pathProvider = pathProvider;
     }
 
     @Override
     public void run() {
-        Optional<Path> filepath = pathProvider.getPath();
-        if (filepath.isEmpty()) return;
-        try {
-            Command program = ProgramParser.parseFile(filepath.get());
-            Interpreter interpreter = new Interpreter();
-            Map<String, BigInteger> result = interpreter.execute(program);
+        pathProvider.getPath().ifPresent(filepath -> {
+            try {
+                String programString = fileSystem.readString(filepath);
 
-            view.runResults().add(result);
-            view.statusBar().statusProperty().set("Executed " + filepath.get());
-        } catch (IOException e) {
-            e.printStackTrace();
-            view.statusBar().statusProperty().set("Failed to execute " + filepath.get() + " due to " + e.getMessage());
-        }
+                Command program = ProgramParser.parseString(programString);
+                Interpreter interpreter = new Interpreter();
+                Map<String, BigInteger> result = interpreter.execute(program);
+
+                view.runResults().getRunResults().add(RunResult.of(result));
+                view.statusBar().setStatus("Executed " + filepath);
+            }
+            catch (IOException | RuntimeException e) {
+                e.printStackTrace();
+                view.statusBar().setStatus("Failed to execute " + filepath + " due to " + e.getMessage());
+            }
+        });
     }
 
 }

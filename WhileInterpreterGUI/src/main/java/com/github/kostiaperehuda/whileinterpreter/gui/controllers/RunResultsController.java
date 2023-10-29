@@ -2,6 +2,8 @@ package com.github.kostiaperehuda.whileinterpreter.gui.controllers;
 
 import com.github.kostiaperehuda.whileinterpreter.gui.ViewModel;
 import com.github.kostiaperehuda.whileinterpreter.gui.viewmodels.Pair;
+import com.github.kostiaperehuda.whileinterpreter.gui.viewmodels.RunResults.RunResult;
+import javafx.collections.ListChangeListener;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.TableView;
@@ -23,7 +25,13 @@ public class RunResultsController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        root.itemsProperty().bind(model.runResults().lastRunResultProperty());
+        model.runResults().getRunResults().addListener((ListChangeListener<RunResult>) change -> {
+            while (change.next()) {
+                for (RunResult result : change.getAddedSubList()) {
+                    root.getItems().setAll(result.getProgramState());
+                }
+            }
+        });
     }
 
 }

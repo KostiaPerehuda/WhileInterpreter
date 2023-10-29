@@ -22,14 +22,14 @@ public class MenuBarController {
     }
 
     @FXML
-    private void onFileClose() {
+    private void onFileExit() {
         Platform.exit();
     }
 
     @FXML
     private void onFileRun() {
         Window window = root.getScene().getWindow();
-        new ExecuteFileAction(model, FileChooserPathProvider.ofWhilePrograms(window)).run();
+        new ExecuteFileAction(model, new FilesFileSystem(), FileChooserPathProvider.ofWhilePrograms(window)).run();
     }
 
     @FXML

@@ -30,7 +30,7 @@ public class WhileInterpreterGUIApplication extends Application {
         stage.setScene(scene);
         stage.show();
 
-        context.getViewModel().statusBar().statusProperty().set("Ready");
+        context.getViewModel().statusBar().setStatus("Ready");
     }
 
     public void setRoot(String fxml) throws IOException {

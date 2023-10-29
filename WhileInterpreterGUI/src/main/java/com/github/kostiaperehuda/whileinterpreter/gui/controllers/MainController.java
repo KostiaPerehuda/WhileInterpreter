@@ -26,7 +26,7 @@ public class MainController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        mainTextArea.textProperty().bind(Bindings.select(model.editor().activeTabProperty(), "text"));
+        mainTextArea.textProperty().bind(Bindings.select(model.editor().selectedTabProperty(), "text"));
     }
 
 }

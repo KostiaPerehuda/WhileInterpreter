@@ -1,24 +1,38 @@
 package com.github.kostiaperehuda.whileinterpreter.gui.viewmodels;
 
-import javafx.beans.property.ObjectProperty;
-import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
 import java.math.BigInteger;
+import java.util.List;
 import java.util.Map;
 
 public class RunResults {
 
-    private final ObjectProperty<ObservableList<Pair<String, BigInteger>>> lastRunResult =
-            new SimpleObjectProperty<>(FXCollections.observableArrayList());
+    private final ObservableList<RunResult> runResults = FXCollections.observableArrayList();
 
-    public ObjectProperty<ObservableList<Pair<String, BigInteger>>> lastRunResultProperty() {
-        return lastRunResult;
+    public ObservableList<RunResult> getRunResults() {
+        return runResults;
     }
 
-    public void add(Map<String, BigInteger> result) {
-        lastRunResult.get().setAll(result.entrySet().stream().map(Pair::fromMapEntry).toList());
+    public static class RunResult {
+
+        private final ObservableList<Pair<String, BigInteger>> programState = FXCollections.observableArrayList();
+
+        public RunResult() {}
+
+        public RunResult(List<Pair<String, BigInteger>> programState) {
+            this.programState.setAll(programState);
+        }
+
+        public static RunResult of(Map<String, BigInteger> programState) {
+            return new RunResult(programState.entrySet().stream().map(Pair::fromMapEntry).toList());
+        }
+
+        public ObservableList<Pair<String, BigInteger>> getProgramState() {
+            return programState;
+        }
+
     }
 
 }

@@ -6,7 +6,7 @@
     <Menu text="File">
         <MenuItem onAction="#onFileRun" text="Run"/>
         <MenuItem onAction="#onFileOpen" text="Open"/>
-        <MenuItem onAction="#onFileClose" text="Close"/>
+        <MenuItem onAction="#onFileExit" text="Exit"/>
     </Menu>
     <Menu text="Help">
         <MenuItem text="About"/>

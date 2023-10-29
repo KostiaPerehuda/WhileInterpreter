@@ -11,4 +11,9 @@ public class FilesFileSystem implements FileSystem {
         return Files.readString(path);
     }
 
+    @Override
+    public void writeString(Path path, String string) throws IOException {
+        Files.writeString(path, string);
+    }
+
 }
