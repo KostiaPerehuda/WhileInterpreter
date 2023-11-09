@@ -4,5 +4,5 @@
 <?import javafx.scene.control.ToolBar?>
 <ToolBar xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml" fx:id="root"
          fx:controller="com.github.kostiaperehuda.whileinterpreter.gui.controllers.ToolBarController">
-        <Button text="Button" onAction="#onRun"/>
+        <Button text="Run" onAction="#onRun"/>
 </ToolBar>
