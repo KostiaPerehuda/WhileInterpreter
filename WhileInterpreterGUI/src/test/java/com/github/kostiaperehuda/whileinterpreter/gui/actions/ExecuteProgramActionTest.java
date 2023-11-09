@@ -8,8 +8,7 @@ import org.junit.jupiter.api.Test;
 import java.math.BigInteger;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.*;
 
 class ExecuteProgramActionTest {
 
@@ -59,6 +58,17 @@ class ExecuteProgramActionTest {
 
 
         assertNotEquals("Should change!", viewModel.statusBar().getStatus());
+    }
+
+    @Test
+    void shouldDoNothingWhenNoEditorTabIsSelected() {
+        ViewModel viewModel = new ViewModel();
+        viewModel.statusBar().setStatus("Should not change!");
+
+        new ExecuteProgramAction(viewModel).run();
+
+        assertTrue(viewModel.runResults().getRunResultList().isEmpty());
+        assertEquals("Should not change!", viewModel.statusBar().getStatus());
     }
 
 }

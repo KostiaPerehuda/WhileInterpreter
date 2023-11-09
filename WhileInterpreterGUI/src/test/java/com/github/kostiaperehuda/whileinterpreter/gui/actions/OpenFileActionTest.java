@@ -8,8 +8,7 @@ import org.junit.jupiter.api.Test;
 import java.nio.file.Path;
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.*;
 
 class OpenFileActionTest {
 
@@ -61,6 +60,17 @@ class OpenFileActionTest {
 
 
         assertNotEquals("Should change!", viewModel.statusBar().getStatus());
+    }
+
+    @Test
+    void shouldDoNothingWhenNoFilepathIsProvided() {
+        ViewModel viewModel = new ViewModel();
+        viewModel.statusBar().setStatus("Should not change!");
+
+        new OpenFileAction(viewModel, null, Optional::empty).run();
+
+        assertTrue(viewModel.runResults().getRunResultList().isEmpty());
+        assertEquals("Should not change!", viewModel.statusBar().getStatus());
     }
 
 }
