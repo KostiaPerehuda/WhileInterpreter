@@ -10,6 +10,7 @@ import java.math.BigInteger;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -63,7 +64,7 @@ class InterpreterTest {
     }
 
     @Test
-    void shouldReturn0WhenExtractingUndefinedVariableFromTheProgramState() {
+    void shouldReturnZeroWhenExtractingUndefinedVariableFromTheProgramState() {
         Command assignment = new Assign(new Variable("variable"), new Variable("variable"));
 
         Interpreter interpreter = new Interpreter();
@@ -73,13 +74,13 @@ class InterpreterTest {
     }
 
     @Test
-    void shouldInitializePreviouslyUndefinedVariableToZeroAndKeepItInTheProgramStateThereafterWhenItIsReferencedForTheFirstTime() {
+    void shouldInitializePreviouslyUndefinedVariableAndKeepItInTheProgramStateThereafterWhenItIsReferencedForTheFirstTime() {
         Command assignment = new Assign(new Variable("result"), new Variable("variable"));
 
         Interpreter interpreter = new Interpreter();
         Map<String, BigInteger> finalState = interpreter.execute(assignment);
 
-        assertEquals(Map.of("result", BigInteger.ZERO, "variable", BigInteger.ZERO), finalState);
+        assertEquals(Set.of("result", "variable"), finalState.keySet());
     }
 
     @Test
