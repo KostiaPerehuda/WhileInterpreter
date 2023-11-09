@@ -16,21 +16,14 @@ public class WhileInterpreterGUIApplication extends Application {
 
     @Override
     public void init() {
-    }
-
-    @Override
-    public void stop() {
+        context = new ApplicationContext(new ViewModel());
     }
 
     @Override
     public void start(Stage stage) throws IOException {
-        context = new ApplicationContext(new ViewModel());
-
         scene = new Scene(loadFXML("Main"), 960, 720);
         stage.setScene(scene);
         stage.show();
-
-        context.getViewModel().statusBar().setStatus("Ready");
     }
 
     public void setRoot(String fxml) throws IOException {

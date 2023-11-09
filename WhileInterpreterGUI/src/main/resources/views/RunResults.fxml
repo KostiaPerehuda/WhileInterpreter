@@ -8,7 +8,7 @@
     <columns>
         <TableColumn text="Name">
             <cellValueFactory>
-                <PropertyValueFactory property="key"/>
+                <PropertyValueFactory property="name"/>
             </cellValueFactory>
         </TableColumn>
         <TableColumn text="Value">

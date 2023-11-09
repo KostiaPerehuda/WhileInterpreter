@@ -3,7 +3,7 @@ package com.github.kostiaperehuda.whileinterpreter.gui.actions;
 import com.github.kostiaperehuda.whileinterpreter.gui.ViewModel;
 import com.github.kostiaperehuda.whileinterpreter.gui.fileio.PathProvider;
 import com.github.kostiaperehuda.whileinterpreter.gui.testdoubles.fileio.FakeInMemoryFileSystem;
-import com.github.kostiaperehuda.whileinterpreter.gui.viewmodels.Pair;
+import com.github.kostiaperehuda.whileinterpreter.gui.viewmodels.RunResults.Variable;
 import org.junit.jupiter.api.Test;
 
 import java.math.BigInteger;
@@ -29,8 +29,25 @@ class ExecuteFileActionTest {
         new ExecuteFileAction(viewModel, fileSystem, pathProvider).run();
 
 
-        assertEquals(List.of(new Pair<>("a", BigInteger.ONE)),
-                     viewModel.runResults().getRunResults().getLast().getProgramState());
+        assertEquals(List.of(new Variable("a", BigInteger.ONE)),
+                     viewModel.runResults().getRunResultList().getLast().getProgramState());
+    }
+
+    @Test
+    void shouldReportSuccessMessageToStatusBarAfterSuccessfulExecution() {
+        ViewModel viewModel = new ViewModel();
+        viewModel.statusBar().setStatus("Should change!");
+
+        FakeInMemoryFileSystem fileSystem = new FakeInMemoryFileSystem();
+        fileSystem.writeString(Path.of("filepath"), "a = 1");
+
+        PathProvider pathProvider = () -> Optional.of(Path.of("filepath"));
+
+
+        new ExecuteFileAction(viewModel, fileSystem, pathProvider).run();
+
+
+        assertNotEquals("Should change!", viewModel.statusBar().getStatus());
     }
 
     @Test

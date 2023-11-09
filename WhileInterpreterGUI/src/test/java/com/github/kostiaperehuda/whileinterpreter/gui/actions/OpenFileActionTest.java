@@ -31,6 +31,23 @@ class OpenFileActionTest {
     }
 
     @Test
+    void shouldReportSuccessMessageToStatusBarAfterSuccessfullyOpeningAFileInANewANewEditorTab() {
+        ViewModel viewModel = new ViewModel();
+        viewModel.statusBar().setStatus("Should change!");
+
+        FakeInMemoryFileSystem fileSystem = new FakeInMemoryFileSystem();
+        fileSystem.writeString(Path.of("filepath"), "Dummy File");
+
+        PathProvider pathProvider = () -> Optional.of(Path.of("filepath"));
+
+
+        new OpenFileAction(viewModel, fileSystem, pathProvider).run();
+
+
+        assertNotEquals("Should change!", viewModel.statusBar().getStatus());
+    }
+
+    @Test
     void shouldReportErrorToStatusBarWhenFailingToReadContentsOfTheFileIntoANewEditorTab() {
         ViewModel viewModel = new ViewModel();
         viewModel.statusBar().setStatus("Should change!");

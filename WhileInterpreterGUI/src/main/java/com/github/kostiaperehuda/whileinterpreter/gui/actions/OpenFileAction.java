@@ -32,8 +32,7 @@ public class OpenFileAction implements Runnable {
             view.statusBar().setStatus("Opened " + filepath.get());
         }
         catch (IOException e) {
-            e.printStackTrace();
-            view.statusBar().setStatus("Failed to open " + filepath.get());
+            view.statusBar().setStatus("Failed to open %s! Got error: %s".formatted(filepath.get(), e.getMessage()));
         }
     }
 

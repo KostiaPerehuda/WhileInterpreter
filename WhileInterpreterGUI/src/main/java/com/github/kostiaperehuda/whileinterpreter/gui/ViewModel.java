@@ -12,6 +12,7 @@ public record ViewModel(
 
     public ViewModel() {
         this(new Editor(), new StatusBar(), new RunResults());
+        statusBar.setStatus("Ready");
     }
 
 }

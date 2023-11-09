@@ -28,12 +28,11 @@ public class ExecuteProgramAction implements Runnable {
             Interpreter interpreter = new Interpreter();
             Map<String, BigInteger> result = interpreter.execute(command);
 
-            view.runResults().getRunResults().add(RunResult.of(result));
+            view.runResults().getRunResultList().add(RunResult.of(result));
             view.statusBar().setStatus("Executed current program");
         }
         catch (RuntimeException e) {
-            e.printStackTrace();
-            view.statusBar().setStatus("Failed to execute current program due to " + e.getMessage());
+            view.statusBar().setStatus("Failed to execute current program! Got error: " + e.getMessage());
         }
     }
 

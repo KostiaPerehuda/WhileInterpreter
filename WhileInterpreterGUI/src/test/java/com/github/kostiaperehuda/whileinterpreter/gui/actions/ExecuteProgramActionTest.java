@@ -2,7 +2,7 @@ package com.github.kostiaperehuda.whileinterpreter.gui.actions;
 
 import com.github.kostiaperehuda.whileinterpreter.gui.ViewModel;
 import com.github.kostiaperehuda.whileinterpreter.gui.viewmodels.Editor;
-import com.github.kostiaperehuda.whileinterpreter.gui.viewmodels.Pair;
+import com.github.kostiaperehuda.whileinterpreter.gui.viewmodels.RunResults.Variable;
 import org.junit.jupiter.api.Test;
 
 import java.math.BigInteger;
@@ -25,8 +25,24 @@ class ExecuteProgramActionTest {
         new ExecuteProgramAction(viewModel).run();
 
 
-        assertEquals(List.of(new Pair<>("a", BigInteger.ONE)),
-                     viewModel.runResults().getRunResults().getLast().getProgramState());
+        assertEquals(List.of(new Variable("a", BigInteger.ONE)),
+                     viewModel.runResults().getRunResultList().getLast().getProgramState());
+    }
+
+    @Test
+    void shouldReportSuccessMessageToStatusBarAfterSuccessfullyExecutingTheProgram() {
+        ViewModel viewModel = new ViewModel();
+        viewModel.statusBar().setStatus("Should change!");
+
+        Editor.Tab tab = viewModel.editor().openNewTab();
+        tab.setText("a = 1");
+        viewModel.editor().select(tab);
+
+
+        new ExecuteProgramAction(viewModel).run();
+
+
+        assertNotEquals("Should change!", viewModel.statusBar().getStatus());
     }
 
     @Test

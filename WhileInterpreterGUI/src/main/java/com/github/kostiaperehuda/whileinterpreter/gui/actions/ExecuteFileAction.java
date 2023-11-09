@@ -34,12 +34,11 @@ public class ExecuteFileAction implements Runnable {
                 Interpreter interpreter = new Interpreter();
                 Map<String, BigInteger> result = interpreter.execute(program);
 
-                view.runResults().getRunResults().add(RunResult.of(result));
+                view.runResults().getRunResultList().add(RunResult.of(result));
                 view.statusBar().setStatus("Executed " + filepath);
             }
             catch (IOException | RuntimeException e) {
-                e.printStackTrace();
-                view.statusBar().setStatus("Failed to execute " + filepath + " due to " + e.getMessage());
+                view.statusBar().setStatus("Failed to execute %s! %s".formatted(filepath, e.getMessage()));
             }
         });
     }

@@ -4,17 +4,16 @@ import javafx.beans.property.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
-
 public class Editor {
 
     private final ObservableList<Tab> tabs = FXCollections.observableArrayList();
     private final ObjectProperty<Tab> selectedTab = new SimpleObjectProperty<>();
 
     public ObservableList<Tab> getTabs() {
-        return tabs;
+        return FXCollections.unmodifiableObservableList(tabs);
     }
 
-    public ObjectProperty<Tab> selectedTabProperty() {
+    public ReadOnlyObjectProperty<Tab> selectedTabProperty() {
         return selectedTab;
     }
 

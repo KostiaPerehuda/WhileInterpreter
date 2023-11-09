@@ -9,28 +9,48 @@ import java.util.Map;
 
 public class RunResults {
 
-    private final ObservableList<RunResult> runResults = FXCollections.observableArrayList();
+    private final ObservableList<RunResult> runResultList = FXCollections.observableArrayList();
 
-    public ObservableList<RunResult> getRunResults() {
-        return runResults;
+    public ObservableList<RunResult> getRunResultList() {
+        return runResultList;
     }
 
     public static class RunResult {
 
-        private final ObservableList<Pair<String, BigInteger>> programState = FXCollections.observableArrayList();
+        private final ObservableList<Variable> programState = FXCollections.observableArrayList();
 
-        public RunResult() {}
-
-        public RunResult(List<Pair<String, BigInteger>> programState) {
+        public RunResult(List<Variable> programState) {
             this.programState.setAll(programState);
         }
 
         public static RunResult of(Map<String, BigInteger> programState) {
-            return new RunResult(programState.entrySet().stream().map(Pair::fromMapEntry).toList());
+            return new RunResult(programState.entrySet().stream().map(Variable::fromMapEntry).toList());
         }
 
-        public ObservableList<Pair<String, BigInteger>> getProgramState() {
-            return programState;
+        public ObservableList<Variable> getProgramState() {
+            return FXCollections.unmodifiableObservableList(programState);
+        }
+
+    }
+
+    public record Variable(String name, BigInteger value) {
+
+        private static Variable fromMapEntry(Map.Entry<String, BigInteger> entry) {
+            return new Variable(entry.getKey(), entry.getValue());
+        }
+
+        /**
+         * For JavaFX interoperability
+         */
+        public String getName() {
+            return name;
+        }
+
+        /**
+         * For JavaFX interoperability
+         */
+        public BigInteger getValue() {
+            return value;
         }
 
     }
