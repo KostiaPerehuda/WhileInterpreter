@@ -63,11 +63,23 @@ class InterpreterTest {
     }
 
     @Test
-    void shouldThrowExceptionWhenExtractingUndefinedVariableFromTheProgramState() {
+    void shouldReturn0WhenExtractingUndefinedVariableFromTheProgramState() {
+        Command assignment = new Assign(new Variable("variable"), new Variable("variable"));
+
+        Interpreter interpreter = new Interpreter();
+        Map<String, BigInteger> finalState = interpreter.execute(assignment);
+
+        assertEquals(Map.of("variable", BigInteger.ZERO), finalState);
+    }
+
+    @Test
+    void shouldInitializePreviouslyUndefinedVariableToZeroAndKeepItInTheProgramStateThereafterWhenItIsReferencedForTheFirstTime() {
         Command assignment = new Assign(new Variable("result"), new Variable("variable"));
 
         Interpreter interpreter = new Interpreter();
-        assertThrows(UndefinedVariableException.class, () -> interpreter.execute(assignment));
+        Map<String, BigInteger> finalState = interpreter.execute(assignment);
+
+        assertEquals(Map.of("result", BigInteger.ZERO, "variable", BigInteger.ZERO), finalState);
     }
 
     @Test

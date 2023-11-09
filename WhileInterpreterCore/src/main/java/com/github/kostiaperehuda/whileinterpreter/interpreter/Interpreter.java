@@ -60,10 +60,7 @@ public class Interpreter {
             case Plus(var left, var right) -> evaluate(left).add(evaluate(right));
             case Minus(var left, var right) -> evaluate(left).subtract(evaluate(right));
             case Multiply(var left, var right) -> evaluate(left).multiply(evaluate(right));
-            case Variable(var name) -> {
-                if (state.containsKey(name)) yield state.get(name);
-                throw new UndefinedVariableException(name);
-            }
+            case Variable(var name) -> state.computeIfAbsent(name, unused -> BigInteger.ZERO);
         };
     }
 
