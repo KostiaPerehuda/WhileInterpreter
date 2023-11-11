@@ -18,9 +18,11 @@ public class Editor {
     }
 
     public void select(Tab tab) {
-        if (tabs.contains(tab)) {
+        if (tab == null || tabs.contains(tab)) {
             selectedTab.set(tab);
+            return;
         }
+        throw new IllegalArgumentException("Cannot select %s because it does not belong to the editor!".formatted(tab));
     }
 
     public Tab getSelectedTab() {
@@ -30,7 +32,6 @@ public class Editor {
     public Tab openNewTab() {
         Tab tab = new Tab();
         tabs.add(tab);
-        select(tab);
         return tab;
     }
 

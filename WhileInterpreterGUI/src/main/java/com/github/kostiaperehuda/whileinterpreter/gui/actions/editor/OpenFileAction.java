@@ -1,4 +1,4 @@
-package com.github.kostiaperehuda.whileinterpreter.gui.actions;
+package com.github.kostiaperehuda.whileinterpreter.gui.actions.editor;
 
 import com.github.kostiaperehuda.whileinterpreter.gui.ViewModel;
 import com.github.kostiaperehuda.whileinterpreter.gui.fileio.FileSystem;

@@ -2,7 +2,7 @@ package com.github.kostiaperehuda.whileinterpreter.gui.controllers;
 
 import com.github.kostiaperehuda.whileinterpreter.gui.ViewModel;
 import com.github.kostiaperehuda.whileinterpreter.gui.actions.ExecuteFileAction;
-import com.github.kostiaperehuda.whileinterpreter.gui.actions.OpenFileAction;
+import com.github.kostiaperehuda.whileinterpreter.gui.actions.editor.OpenFileAction;
 import com.github.kostiaperehuda.whileinterpreter.gui.fileio.FileChooserPathProvider;
 import com.github.kostiaperehuda.whileinterpreter.gui.fileio.FilesFileSystem;
 import javafx.application.Platform;
