@@ -20,7 +20,7 @@ public class BexpParser {
         while (!tokens.isEmpty()) {
             t = tokens.getFirst();
 
-            if (t.getData().equals("&&")) {
+            if (t.data().equals("&&")) {
                 tokens.removeFirst();
                 exp = new And(exp, parseAtom(tokens));
             } else {
@@ -38,12 +38,12 @@ public class BexpParser {
         Token t = tokens.getFirst();
         ArithmeticExpression exp;
 
-        switch (t.getType()) {
+        switch (t.type()) {
             case KEYWORD:
-                if (t.getData().equals("true")) {
+                if (t.data().equals("true")) {
                     tokens.removeFirst();
                     return Bool.TRUE;
-                } else if (t.getData().equals("false")) {
+                } else if (t.data().equals("false")) {
                     tokens.removeFirst();
                     return Bool.FALSE;
                 }
@@ -51,9 +51,9 @@ public class BexpParser {
                 throw new RuntimeException("Syntax error!");
 
             case CONTROL_SYMBOL:
-                if (t.getData().equals("(")) {
+                if (t.data().equals("(")) {
                     return parseBrackets(tokens);
-                } else if (t.getData().equals("!")) {
+                } else if (t.data().equals("!")) {
                     tokens.removeFirst();
                     return new Not(parseAtom(tokens));
                 }
@@ -67,10 +67,10 @@ public class BexpParser {
                 }
                 t = tokens.getFirst();
 
-                if (t.getData().equals("==")) {
+                if (t.data().equals("==")) {
                     tokens.removeFirst();
                     return new Equals(exp, AexpParser.parse(tokens));
-                } else if (t.getData().equals("<=")) {
+                } else if (t.data().equals("<=")) {
                     tokens.removeFirst();
                     return new LessThanOrEqual(exp, AexpParser.parse(tokens));
                 }
@@ -81,7 +81,7 @@ public class BexpParser {
 
     public static BooleanExpression parseBrackets(Deque<Token> tokens) {
         Token t = tokens.getFirst();
-        if (t.getType() != TokenType.CONTROL_SYMBOL || !t.getData().equals("(")) {
+        if (t.type() != TokenType.CONTROL_SYMBOL || !t.data().equals("(")) {
             throw new RuntimeException("Syntax error!");
         }
 
@@ -93,7 +93,7 @@ public class BexpParser {
         }
 
         t = tokens.getFirst();
-        if (t.getType() != TokenType.CONTROL_SYMBOL || !t.getData().equals(")")) {
+        if (t.type() != TokenType.CONTROL_SYMBOL || !t.data().equals(")")) {
             throw new RuntimeException("Syntax error!");
         }
 

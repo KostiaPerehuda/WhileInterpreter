@@ -21,14 +21,14 @@ public class AexpParser {
         while (!tokens.isEmpty()) {
             t = tokens.getFirst();
 
-            if (t.getType() != TokenType.CONTROL_SYMBOL) {
+            if (t.type() != TokenType.CONTROL_SYMBOL) {
                 break;
             }
 
-            if (t.getData().equals("+")) {
+            if (t.data().equals("+")) {
                 tokens.removeFirst();
                 exp = new Plus(exp, parseProduct(tokens));
-            } else if (t.getData().equals("-")) {
+            } else if (t.data().equals("-")) {
                 tokens.removeFirst();
                 exp = new Minus(exp, parseProduct(tokens));
             } else {
@@ -45,11 +45,11 @@ public class AexpParser {
         while (!tokens.isEmpty()) {
             t = tokens.getFirst();
 
-            if (t.getType() != TokenType.CONTROL_SYMBOL) {
+            if (t.type() != TokenType.CONTROL_SYMBOL) {
                 break;
             }
 
-            if (t.getData().equals("*")) {
+            if (t.data().equals("*")) {
                 tokens.removeFirst();
                 exp = new Multiply(exp, parseAtom(tokens));
             } else {
@@ -65,17 +65,17 @@ public class AexpParser {
         }
         Token t = tokens.getFirst();
 
-        switch (t.getType()) {
+        switch (t.type()) {
             case IDENTIFIER:
                 tokens.removeFirst();
-                return new Variable(t.getData());
+                return new Variable(t.data());
 
             case NUMBER:
                 tokens.removeFirst();
-                return new Const(new BigInteger(t.getData()));
+                return new Const(new BigInteger(t.data()));
 
             case CONTROL_SYMBOL:
-                if (t.getData().equals("(")) {
+                if (t.data().equals("(")) {
                     return parseBrackets(tokens);
                 }
 
@@ -86,7 +86,7 @@ public class AexpParser {
 
     public static ArithmeticExpression parseBrackets(Deque<Token> tokens) {
         Token t = tokens.getFirst();
-        if (t.getType() != TokenType.CONTROL_SYMBOL || !t.getData().equals("(")) {
+        if (t.type() != TokenType.CONTROL_SYMBOL || !t.data().equals("(")) {
             throw new RuntimeException("Syntax error at token " + t + "! Unexpected token at that place!");
         }
 
@@ -98,7 +98,7 @@ public class AexpParser {
         }
 
         t = tokens.getFirst();
-        if (t.getType() != TokenType.CONTROL_SYMBOL || !t.getData().equals(")")) {
+        if (t.type() != TokenType.CONTROL_SYMBOL || !t.data().equals(")")) {
             throw new RuntimeException("Syntax error at token " + t + "! Unexpected token at that place!");
         }
 

@@ -24,7 +24,7 @@ public class CommandParser {
 
         Token t = tokens.getFirst();
 
-        if (t.getData().equals("{")) {
+        if (t.data().equals("{")) {
             return parseSequence(tokens);
         }
 
@@ -37,7 +37,7 @@ public class CommandParser {
         }
 
         Token t = tokens.getFirst();
-        if (!t.getData().equals("{")) {
+        if (!t.data().equals("{")) {
             throw new RuntimeException("Syntax error at token " + t + "! Unexpected token at that place!");
         }
         tokens.removeFirst();
@@ -47,7 +47,7 @@ public class CommandParser {
         while (!tokens.isEmpty()) {
             t = tokens.getFirst();
 
-            if (t.getData().equals("}")) {
+            if (t.data().equals("}")) {
                 tokens.removeFirst();
                 return sequence;
             }
@@ -66,10 +66,10 @@ public class CommandParser {
         Token t = tokens.getFirst();
         Command cmd;
 
-        switch (t.getType()) {
+        switch (t.type()) {
             case IDENTIFIER -> cmd = parseAssign(tokens);
             case KEYWORD -> {
-                switch (t.getData()) {
+                switch (t.data()) {
                     case "if" -> cmd = parseIf(tokens);
                     case "while" -> cmd = parseWhile(tokens);
                     case "skip" -> {
@@ -83,7 +83,7 @@ public class CommandParser {
             default -> throw new RuntimeException("Syntax error at token " + t + "! Unexpected token at that place!");
         }
 
-        if (tokens.getFirst().getData().equals(";")) tokens.removeFirst();
+        if (tokens.getFirst().data().equals(";")) tokens.removeFirst();
 
         return cmd;
     }
@@ -94,14 +94,14 @@ public class CommandParser {
         }
 
         Token t = tokens.removeFirst();
-        if (t.getType() != TokenType.IDENTIFIER) {
-            throw new RuntimeException("Syntax error at token " + t + "! IDENTIFIER expected, but got" + t.getType() + "!");
+        if (t.type() != TokenType.IDENTIFIER) {
+            throw new RuntimeException("Syntax error at token " + t + "! IDENTIFIER expected, but got" + t.type() + "!");
         }
 
-        String varName = t.getData();
+        String varName = t.data();
 
         t = tokens.removeFirst();
-        if (!t.getData().equals("=")) {
+        if (!t.data().equals("=")) {
             throw new RuntimeException("Syntax error at token " + t + "! < CONTROL_SYMBOL = > expected!");
         }
 
@@ -114,7 +114,7 @@ public class CommandParser {
         }
 
         Token t = tokens.removeFirst();
-        if (!t.getData().equals("if")) {
+        if (!t.data().equals("if")) {
             throw new RuntimeException("Syntax error at token " + t + "! < KEYWORD if > expected!");
         }
 
@@ -123,7 +123,7 @@ public class CommandParser {
         Command ifClause = parse(tokens);
 
         t = tokens.getFirst();
-        if (!t.getData().equals("else")) {
+        if (!t.data().equals("else")) {
             return new If(condition, ifClause, new Skip());
         }
 
@@ -137,7 +137,7 @@ public class CommandParser {
         }
 
         Token t = tokens.removeFirst();
-        if (!t.getData().equals("while"))
+        if (!t.data().equals("while"))
             throw new RuntimeException("Syntax error at token " + t + "! < KEYWORD while > expected!");
 
         return new While(BexpParser.parseBrackets(tokens), parse(tokens));
