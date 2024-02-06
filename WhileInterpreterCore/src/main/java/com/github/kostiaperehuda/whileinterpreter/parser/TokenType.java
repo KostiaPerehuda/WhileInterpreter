@@ -13,14 +13,14 @@ public enum TokenType {
     COMMENT("//.*$"),
     WHITESPACE("\\p{javaWhitespace}+"),
 
-    INVALID_TOKEN(".+?(?=" + computePattern(CONTROL_SYMBOL, WHITESPACE) + "|$)");
+    INVALID_TOKEN(".+?(?=" + choiceBetween(CONTROL_SYMBOL, WHITESPACE) + "|$)");
 
     private String pattern;
 
     TokenType(String pattern, String... patterns) {
         this.pattern = pattern;
         if (patterns.length > 0) {
-            this.pattern += ("|" + Stream.of(patterns).collect(Collectors.joining("|")));
+            this.pattern += ("|" + String.join("|", patterns));
         }
     }
 
@@ -29,10 +29,10 @@ public enum TokenType {
     }
 
     public static String getFullPattern() {
-        return computePattern(values());
+        return choiceBetween(values());
     }
 
-    private static String computePattern(TokenType... tokens) {
+    private static String choiceBetween(TokenType... tokens) {
         return Stream.of(tokens)
                 .map(TokenType::getPattern)
                 .collect(Collectors.joining("|"));
