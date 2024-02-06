@@ -1,5 +1,6 @@
 package com.github.kostiaperehuda.whileinterpreter.gui;
 
+import com.github.kostiaperehuda.whileinterpreter.gui.config.FxControllerFactory;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -32,7 +33,7 @@ public class WhileInterpreterGUIApplication extends Application {
 
     private Parent loadFXML(String fxml) throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(WhileInterpreterGUI.class.getResource("/views/" + fxml + ".fxml"));
-        fxmlLoader.setControllerFactory(context::getNewInstanceOf);
+        fxmlLoader.setControllerFactory(new FxControllerFactory(context)::getNewInstanceOf);
         return fxmlLoader.load();
     }
 

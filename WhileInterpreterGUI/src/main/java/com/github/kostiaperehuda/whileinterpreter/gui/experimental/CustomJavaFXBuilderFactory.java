@@ -1,6 +1,6 @@
 package com.github.kostiaperehuda.whileinterpreter.gui.experimental;
 
-import com.github.kostiaperehuda.whileinterpreter.gui.ApplicationContext;
+import com.github.kostiaperehuda.whileinterpreter.gui.config.FxControllerFactory;
 import javafx.fxml.FXMLLoader;
 import javafx.util.Builder;
 import javafx.util.BuilderFactory;
@@ -11,16 +11,16 @@ import java.net.URL;
 
 public final class CustomJavaFXBuilderFactory implements BuilderFactory {
 
-    private final ApplicationContext context;
+    private final FxControllerFactory fxControllerFactory;
 
-    public CustomJavaFXBuilderFactory(ApplicationContext context) {
-        this.context = context;
+    public CustomJavaFXBuilderFactory(FxControllerFactory fxControllerFactory) {
+        this.fxControllerFactory = fxControllerFactory;
     }
 
     @Override
     public Builder<?> getBuilder(Class<?> type) {
         if (type.isAnnotationPresent(FxComponent.class)) {
-            var customizer = new FxComponentCustomizer<>(context.getNewInstanceOf(type));
+            var customizer = new FxComponentCustomizer<>(fxControllerFactory.getNewInstanceOf(type));
             return (Builder.class.isAssignableFrom(type)) ? (Builder<?>) customizer.build() : customizer;
         }
 
